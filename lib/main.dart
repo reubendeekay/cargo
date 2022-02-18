@@ -2,6 +2,7 @@ import 'package:cargo/bottom_nav_bar.dart';
 import 'package:cargo/constants.dart';
 import 'package:cargo/firebase_options.dart';
 import 'package:cargo/providers/auth_provider.dart';
+import 'package:cargo/providers/cargo_provider.dart';
 
 import 'package:cargo/widgets/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: AuthProvider()),
+        ChangeNotifierProvider.value(value: CargoProvider()),
       ],
       child: GetMaterialApp(
           title: 'Fastgate Cargo',
