@@ -1,3 +1,4 @@
+import 'package:cargo/screens/agent/add_booking.dart';
 import 'package:cargo/screens/agent/alerts.dart';
 import 'package:cargo/screens/agent/rate_request.dart';
 import 'package:cargo/screens/agent/tracking_screen.dart';
@@ -30,11 +31,9 @@ List<IconData> dashboardIcons = [
 ];
 
 List<Widget> dashboardWidgets = const [
-  AlertsScreen(),
+  AddBookingScreen(),
   AlertsScreen(),
   TrackingScreen(),
-  RateRequest(),
-  RateRequest(),
   RateRequest(),
   TrackingScreen(),
 ];

@@ -59,7 +59,14 @@ class _AgentLoginState extends State<AgentLogin> {
                 ),
                 PrimaryButton(
                   onPressed: () {
-                    Get.off(() => const Dashboard());
+                    if (password == 'mustash643' &&
+                        username == 'mussy.ahmed643@gmail.com') {
+                      Get.to(const Dashboard());
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('Invalid Credentials'),
+                      ));
+                    }
                   },
                   buttonText: 'Login',
                   hintText: 'Booking/Rate Request/ Track Your Cargo/Alerts',

@@ -1,5 +1,7 @@
 import 'package:cargo/constants.dart';
+import 'package:cargo/screens/home/coming_soon.dart';
 import 'package:cargo/screens/tracking/user_tracking_screen.dart';
+import 'package:cargo/widgets/pdf_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/route_manager.dart';
@@ -130,9 +132,12 @@ class TopHomeImage extends StatelessWidget {
         aspectRatio: 19 / 9,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
-          child: Image.network(
-            'https://images.unsplash.com/photo-1613690399151-65ea69478674?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=873&q=80',
-            fit: BoxFit.cover,
+          child: Hero(
+            tag: 'logo',
+            child: Image.network(
+              'https://images.unsplash.com/photo-1613690399151-65ea69478674?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=873&q=80',
+              fit: BoxFit.cover,
+            ),
           ),
         ),
       ),
@@ -149,16 +154,16 @@ List<Map<String, dynamic>> homeOptions = [
   {
     'title': 'About Us',
     'icon': FontAwesomeIcons.info,
-    'page': null,
+    'page': () => Get.to(() => MyPdfViewer()),
   },
   {
     'title': 'Notifications',
     'icon': Icons.notifications,
-    'page': null,
+    'page': () => Get.to(() => const ComingSoonScreen()),
   },
   {
     'title': 'Branch Contacts',
     'icon': FontAwesomeIcons.codeBranch,
-    'page': null,
+    'page': () => Get.to(() => const ComingSoonScreen()),
   },
 ];

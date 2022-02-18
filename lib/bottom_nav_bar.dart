@@ -7,6 +7,7 @@ import 'package:curved_nav_bar/fab_bar/fab_bottom_app_bar_item.dart';
 import 'package:curved_nav_bar/flutter_curved_bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MyNav extends StatelessWidget {
   const MyNav({Key? key}) : super(key: key);
@@ -17,16 +18,16 @@ class MyNav extends StatelessWidget {
       actionButton: CurvedActionBar(
           onTab: (value) {
             /// perform action here
-            print(value);
+            launch('https://wa.me/254723266163');
           },
           activeIcon: Container(
             padding: const EdgeInsets.all(8),
             decoration: const BoxDecoration(
                 color: Colors.white, shape: BoxShape.circle),
             child: const Icon(
-              Icons.camera_alt,
+              FontAwesomeIcons.telegram,
               size: 50,
-              color: Colors.orange,
+              color: kPrimaryColor,
             ),
           ),
           inActiveIcon: Container(
