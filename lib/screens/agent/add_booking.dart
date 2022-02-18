@@ -129,6 +129,7 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
 
               await Provider.of<CargoProvider>(context, listen: false)
                   .addCargo(cargo);
+              Navigator.of(context).pop();
 
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                 content: Text('Shipping details added to database'),
