@@ -1,5 +1,7 @@
+import 'package:cargo/helpers/send_sms.dart';
 import 'package:cargo/models/cargo_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 
 class CargoProvider with ChangeNotifier {
@@ -9,10 +11,18 @@ class CargoProvider with ChangeNotifier {
   Future<void> addCargo(CargoModel cargo) async {
     _cargo = cargo;
 
+    final doc = cargo.docNo!.split('/').join('_');
+
     await FirebaseFirestore.instance
         .collection('cargos')
-        .doc(cargo.docNo)
+        .doc(doc)
         .set(cargo.toJson());
+
+    await twilioFlutter.sendSMS(
+        toNumber: '+' + cargo.phoneNumber!,
+        messageBody:
+            'Dear customer, your shipment has been added. Monitor and track it using the tracking number ${cargo.docNo!}.');
+
     notifyListeners();
   }
 
@@ -30,7 +40,22 @@ class CargoProvider with ChangeNotifier {
         .collection('cargos')
         .doc(trackingNo.replaceAll('/', '_'))
         .get();
+    final key = UniqueKey();
+    final cargo = CargoModel.fromJson(results.data()!);
+    await twilioFlutter.sendSMS(
+        toNumber: '+' + cargo.phoneNumber!,
+        messageBody:
+            'Dear customer, your verificication code for shipment ${cargo.docNo} is $key . Fastgate cargo Services');
+    return cargo;
+  }
 
-    return CargoModel.fromJson(results.data()!);
+  Future<List<CargoModel>> fetchAllCargo() async {
+    final results = await FirebaseFirestore.instance.collection('cargos').get();
+
+    final List<CargoModel> cargos = [];
+    for (var cargo in results.docs) {
+      cargos.add(CargoModel.fromJson(cargo.data()));
+    }
+    return cargos;
   }
 }

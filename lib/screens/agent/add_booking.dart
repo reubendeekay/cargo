@@ -132,6 +132,7 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
                     '/' +
                     invoiceNumber!,
                 destination: destinaton,
+                phoneNumber: phoneNumber,
                 invoiceNumber: invoiceNumber,
                 origin: origin,
                 paymentMode: paymentMode,

@@ -1,13 +1,15 @@
 import 'package:cargo/constants.dart';
 import 'package:cargo/helpers/lists.dart';
+import 'package:cargo/models/cargo_model.dart';
 import 'package:flutter/material.dart';
 import 'package:lazy_data_table/lazy_data_table.dart';
 
 class MyTable extends StatefulWidget {
-  const MyTable({Key? key, this.rowNumber, this.columnNumber})
+  const MyTable({Key? key, this.rowNumber, this.columnNumber, this.cargos})
       : super(key: key);
   final int? rowNumber;
   final int? columnNumber;
+  final List<CargoModel>? cargos;
 
   @override
   State<MyTable> createState() => _MyTableState();
