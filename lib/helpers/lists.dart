@@ -19,7 +19,7 @@ List<String> dashboardTitles = [
   'My Alerts',
   'Tracking',
   'Rate Request',
-  'Directory'
+  'Logistics Management',
 ];
 
 List<IconData> dashboardIcons = [

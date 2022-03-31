@@ -1,4 +1,3 @@
-import 'package:cargo/bottom_nav_bar.dart';
 import 'package:cargo/constants.dart';
 import 'package:cargo/firebase_options.dart';
 import 'package:cargo/providers/auth_provider.dart';

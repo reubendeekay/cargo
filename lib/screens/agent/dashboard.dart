@@ -34,7 +34,7 @@ class Dashboard extends StatelessWidget {
               childAspectRatio: 1,
               physics: const NeverScrollableScrollPhysics(),
               children: List.generate(
-                  5,
+                  dashboardWidgets.length,
                   (i) => GestureDetector(
                         onTap: () {
                           Get.to(() => dashboardWidgets[i]);

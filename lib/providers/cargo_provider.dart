@@ -17,9 +17,20 @@ class CargoProvider with ChangeNotifier {
   }
 
   Future<void> fetchUserCargo(String docNo) async {
-    final cargoSnapshot =
-        await FirebaseFirestore.instance.collection('cargos').doc(docNo).get();
+    final cargoSnapshot = await FirebaseFirestore.instance
+        .collection('cargos')
+        .doc(docNo.replaceAll('/', '_'))
+        .get();
     _cargo = CargoModel.fromJson(cargoSnapshot.data()!);
     notifyListeners();
+  }
+
+  Future<CargoModel> getShipment(String trackingNo) async {
+    final results = await FirebaseFirestore.instance
+        .collection('cargos')
+        .doc(trackingNo.replaceAll('/', '_'))
+        .get();
+
+    return CargoModel.fromJson(results.data()!);
   }
 }

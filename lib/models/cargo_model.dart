@@ -9,10 +9,14 @@ class CargoModel {
   final String? currentLocation;
   final String? deliveryDate;
   final String? userId;
+  final String? status;
+  final String? phoneNumber;
 
   CargoModel({
     this.docNo,
+    this.status,
     this.customerName,
+    this.phoneNumber,
     this.createdAt,
     this.origin,
     this.destination,
@@ -32,6 +36,7 @@ class CargoModel {
         invoiceNumber: json["invoiceNumber"],
         currentLocation: json["currentLocation"],
         userId: json["userId"],
+        phoneNumber: json["phoneNumber"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -43,5 +48,6 @@ class CargoModel {
         "invoiceNumber": invoiceNumber,
         "currentLocation": currentLocation,
         "userId": userId,
+        "phoneNumber": phoneNumber,
       };
 }

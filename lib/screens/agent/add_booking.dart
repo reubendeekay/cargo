@@ -20,6 +20,7 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
   String? origin;
 
   String? destinaton;
+  String? phoneNumber;
 
   String? paymentMode;
 
@@ -55,6 +56,16 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
               onChanged: (val) {
                 setState(() {
                   customerName = val;
+                });
+              }),
+          const SizedBox(
+            height: 10,
+          ),
+          myTextField(
+              hint: 'Customer Phone(eg 2547123456678)',
+              onChanged: (val) {
+                setState(() {
+                  phoneNumber = val;
                 });
               }),
           const SizedBox(

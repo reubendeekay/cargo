@@ -37,6 +37,8 @@ dependencies:
   firebase_storage: ^10.2.3
   flutter:
     sdk: flutter
+  flutter_sms: ^2.3.2
+  flutter_svg: ^1.0.3
   font_awesome_flutter: ^9.2.0
   get: ^4.3.8
   google_fonts: ^2.1.0

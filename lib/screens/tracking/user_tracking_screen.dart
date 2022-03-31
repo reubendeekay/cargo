@@ -1,4 +1,5 @@
 import 'package:cargo/helpers/lists.dart';
+import 'package:cargo/providers/cargo_provider.dart';
 import 'package:cargo/screens/shipment/shipment_details.dart';
 import 'package:cargo/widgets/logo.dart';
 import 'package:cargo/widgets/my_border_widget.dart';
@@ -7,6 +8,7 @@ import 'package:cargo/widgets/my_text_field.dart';
 import 'package:cargo/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
+import 'package:provider/provider.dart';
 
 class UserTrackingScreen extends StatefulWidget {
   const UserTrackingScreen({Key? key}) : super(key: key);
@@ -71,7 +73,15 @@ class _UserTrackingScreenState extends State<UserTrackingScreen> {
                 PrimaryButton(
                   buttonText: 'Search',
                   onPressed: () {
-                    Get.to(() => const ShipmentDetails());
+                    Provider.of<CargoProvider>(context, listen: false)
+                        .getShipment(
+                          trackingNumber!,
+                        )
+                        .then(
+                          (value) => Get.to(
+                            () => ShipmentDetails(cargo: value),
+                          ),
+                        );
                   },
                   hintText: 'Track your Cargo',
                 )

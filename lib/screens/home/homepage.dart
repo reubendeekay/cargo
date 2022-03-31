@@ -1,5 +1,7 @@
 import 'package:cargo/constants.dart';
+import 'package:cargo/screens/home/branch_contacts.dart';
 import 'package:cargo/screens/home/coming_soon.dart';
+import 'package:cargo/screens/notifications/notifications_screen.dart';
 import 'package:cargo/screens/tracking/user_tracking_screen.dart';
 import 'package:cargo/widgets/pdf_viewer.dart';
 import 'package:flutter/material.dart';
@@ -159,11 +161,11 @@ List<Map<String, dynamic>> homeOptions = [
   {
     'title': 'Notifications',
     'icon': Icons.notifications,
-    'page': () => Get.to(() => const ComingSoonScreen()),
+    'page': () => Get.to(() => const NotificationsScreen()),
   },
   {
     'title': 'Branch Contacts',
     'icon': FontAwesomeIcons.codeBranch,
-    'page': () => Get.to(() => const ComingSoonScreen()),
+    'page': () => Get.to(() => const BranchContactsScreen()),
   },
 ];

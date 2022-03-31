@@ -1,10 +1,12 @@
+import 'package:cargo/models/cargo_model.dart';
 import 'package:cargo/widgets/logo.dart';
 import 'package:cargo/widgets/my_border_widget.dart';
 import 'package:cargo/widgets/shipment_tracking_stepper.dart';
 import 'package:flutter/material.dart';
 
 class ShipmentDetails extends StatelessWidget {
-  const ShipmentDetails({Key? key}) : super(key: key);
+  const ShipmentDetails({Key? key, required this.cargo}) : super(key: key);
+  final CargoModel cargo;
 
   @override
   Widget build(BuildContext context) {
@@ -27,16 +29,16 @@ class ShipmentDetails extends StatelessWidget {
           MyBorderWidget(
             child: Column(
               children: [
-                detail(context, 'Doc No', 'DEL/AE/J01929'),
-                detail(context, 'Date', '18/04/2021'),
-                detail(context, 'Invoice No', '792155791'),
-                detail(context, 'Origin', 'China'),
-                detail(context, 'Destination', 'Kenya'),
-                detail(context, 'Cur.\nLocation', 'Dubai'),
+                detail(context, 'Doc No', cargo.docNo!),
+                detail(context, 'Date', cargo.deliveryDate.toString()),
+                detail(context, 'Invoice No', cargo.invoiceNumber!),
+                detail(context, 'Origin', cargo.origin!),
+                detail(context, 'Destination', cargo.destination!),
+                detail(context, 'Cur.\nLocation', cargo.currentLocation!),
                 detail(
                     context, 'Cur.\nStatus', 'Received at Destination Depot'),
                 detail(context, 'POD', 'Download POD'),
-                detail(context, 'Payment Mode', 'Credit'),
+                detail(context, 'Payment Mode', cargo.paymentMode!),
               ],
             ),
           ),

@@ -1,3 +1,4 @@
+import 'package:cargo/providers/auth_provider.dart';
 import 'package:cargo/screens/agent/dashboard.dart';
 import 'package:cargo/widgets/logo.dart';
 import 'package:cargo/widgets/my_border_widget.dart';
@@ -5,6 +6,7 @@ import 'package:cargo/widgets/my_text_field.dart';
 import 'package:cargo/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
+import 'package:provider/provider.dart';
 
 class AgentLogin extends StatefulWidget {
   const AgentLogin({Key? key}) : super(key: key);
@@ -17,6 +19,7 @@ class _AgentLoginState extends State<AgentLogin> {
   String? username;
 
   String? password;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -58,17 +61,28 @@ class _AgentLoginState extends State<AgentLogin> {
                   height: 20,
                 ),
                 PrimaryButton(
-                  onPressed: () {
-                    if (password == 'mustash643' &&
-                        username == 'mussy.ahmed643@gmail.com') {
-                      Get.to(const Dashboard());
-                    } else {
+                  onPressed: () async {
+                    setState(() {
+                      isLoading = true;
+                    });
+                    try {
+                      await Provider.of<AuthProvider>(context, listen: false)
+                          .signIn(username!, password!);
+
+                      setState(() {
+                        isLoading = false;
+                      });
+                      Get.to(() => const Dashboard());
+                    } catch (e) {
+                      setState(() {
+                        isLoading = false;
+                      });
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text('Invalid Credentials'),
                       ));
                     }
                   },
-                  buttonText: 'Login',
+                  buttonText: isLoading ? '......' : 'Login',
                   hintText: 'Booking/Rate Request/ Track Your Cargo/Alerts',
                   icon: Icons.lock_open,
                 )
