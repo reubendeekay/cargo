@@ -27,6 +27,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  cached_network_image: ^3.2.0
   cloud_firestore: ^3.1.8
   cupertino_icons: ^1.0.2
   curved_nav_bar: ^0.0.2
@@ -35,18 +36,25 @@ dependencies:
   firebase_database: ^9.0.4
   firebase_messaging: ^11.2.4
   firebase_storage: ^10.2.3
+  flare_flutter: ^3.0.2
   flutter:
     sdk: flutter
   flutter_sms: ^2.3.2
   flutter_svg: ^1.0.3
+  flutx:
+    path: ./flutx
   font_awesome_flutter: ^9.2.0
   get: ^4.3.8
   google_fonts: ^2.1.0
   intl: ^0.17.0
   lazy_data_table: ^0.3.1
   lottie: ^1.2.1
+  material_design_icons_flutter: ^5.0.6595
+  media_picker_widget: ^0.0.7
   native_pdf_view: ^6.0.0+1
-  provider: ^6.0.1
+  nb_utils: ^4.4.17
+  provider: ^5.0.0
+  shimmer: ^2.0.0
   twilio_flutter: ^0.0.9
   url_launcher: ^6.0.20
 

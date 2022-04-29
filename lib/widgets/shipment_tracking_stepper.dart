@@ -1,37 +1,38 @@
 import 'package:cargo/constants.dart';
+import 'package:cargo/models/cargo_model.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ShipmentTrackingStepper extends StatelessWidget {
-  const ShipmentTrackingStepper({Key? key}) : super(key: key);
+  const ShipmentTrackingStepper({Key? key, required this.cargo})
+      : super(key: key);
+  final CargoModel cargo;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          icon(),
-          icon(
-              title: 'Transit Depot\nWAGHOLI',
-              icon: FontAwesomeIcons.planeDeparture),
-          icon(
-            title: 'Destination Depot\nMOMBASA',
-            icon: FontAwesomeIcons.planeArrival,
-          ),
-          icon(
-              title: 'Dispatched Item',
-              color: Colors.red,
-              icon: FontAwesomeIcons.truckMoving),
-          icon(
-              title: 'Product Delivered',
-              isLast: true,
-              color: Colors.red,
-              icon: FontAwesomeIcons.peopleCarry),
-          const SizedBox(
-            height: 20,
-          ),
-        ],
-      ),
+    return Column(
+      children: [
+        icon(),
+        icon(
+            title: 'Transit Depot\n' + cargo.currentLocation!,
+            icon: FontAwesomeIcons.planeDeparture),
+        icon(
+          title: 'Destination Depot\n' + cargo.destination!,
+          icon: FontAwesomeIcons.planeArrival,
+        ),
+        icon(
+            title: 'Dispatched Item',
+            color: Colors.green,
+            icon: FontAwesomeIcons.truckMoving),
+        icon(
+            title: 'Product Delivered',
+            isLast: true,
+            color: Colors.red,
+            icon: FontAwesomeIcons.peopleCarry),
+        const SizedBox(
+          height: 20,
+        ),
+      ],
     );
   }
 
@@ -40,12 +41,12 @@ class ShipmentTrackingStepper extends StatelessWidget {
     return Row(
       children: [
         const SizedBox(
-          width: 50,
+          width: 40,
         ),
         SizedBox(
           width: 120,
           child: Text(
-            title ?? 'Consignment Booked\nCHINA',
+            title ?? 'Consignment Booked\n' + cargo.origin!,
             textAlign: TextAlign.center,
             style: const TextStyle(fontSize: 12),
           ),

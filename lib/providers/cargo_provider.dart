@@ -7,6 +7,8 @@ import 'package:flutter/foundation.dart';
 class CargoProvider with ChangeNotifier {
   CargoModel? _cargo;
   CargoModel get cargo => _cargo!;
+  String? sms;
+  String? phoneNumber;
 
   Future<void> addCargo(CargoModel cargo) async {
     _cargo = cargo;
@@ -26,27 +28,30 @@ class CargoProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> fetchUserCargo(String docNo) async {
+  Future<CargoModel> fetchUserCargo(String docNo) async {
     final cargoSnapshot = await FirebaseFirestore.instance
         .collection('cargos')
         .doc(docNo.replaceAll('/', '_'))
         .get();
-    _cargo = CargoModel.fromJson(cargoSnapshot.data()!);
     notifyListeners();
+    return _cargo = CargoModel.fromJson(cargoSnapshot);
   }
 
-  Future<CargoModel> getShipment(String trackingNo) async {
+  Future<void> getShipment(String trackingNo) async {
+    sms == '';
     final results = await FirebaseFirestore.instance
         .collection('cargos')
         .doc(trackingNo.replaceAll('/', '_'))
         .get();
     final key = UniqueKey();
+    sms = key.toString();
     final cargo = CargoModel.fromJson(results.data()!);
     await twilioFlutter.sendSMS(
         toNumber: '+' + cargo.phoneNumber!,
         messageBody:
             'Dear customer, your verificication code for shipment ${cargo.docNo} is $key . Fastgate cargo Services');
-    return cargo;
+    _cargo = cargo;
+    phoneNumber = cargo.phoneNumber!;
   }
 
   Future<List<CargoModel>> fetchAllCargo() async {
@@ -54,7 +59,7 @@ class CargoProvider with ChangeNotifier {
 
     final List<CargoModel> cargos = [];
     for (var cargo in results.docs) {
-      cargos.add(CargoModel.fromJson(cargo.data()));
+      cargos.add(CargoModel.fromJson(cargo));
     }
     return cargos;
   }

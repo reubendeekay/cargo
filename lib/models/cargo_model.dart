@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class CargoModel {
   final String? docNo;
   final String? customerName;
@@ -27,7 +29,7 @@ class CargoModel {
     this.userId,
   });
 
-  factory CargoModel.fromJson(Map<String, dynamic> json) => CargoModel(
+  factory CargoModel.fromJson(dynamic json) => CargoModel(
         docNo: json["id"],
         createdAt: json["createdAt"],
         origin: json["origin"],
@@ -50,4 +52,16 @@ class CargoModel {
         "userId": userId,
         "phoneNumber": phoneNumber,
       };
+
+  List<String> row() {
+    return [
+      docNo!,
+      origin!,
+      destination!,
+      phoneNumber!,
+      currentLocation!,
+      DateFormat('dd/MMM/yyyy').format(DateTime.parse(createdAt!)),
+      paymentMode!,
+    ];
+  }
 }

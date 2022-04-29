@@ -5,11 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:lazy_data_table/lazy_data_table.dart';
 
 class MyTable extends StatefulWidget {
-  const MyTable({Key? key, this.rowNumber, this.columnNumber, this.cargos})
-      : super(key: key);
-  final int? rowNumber;
-  final int? columnNumber;
-  final List<CargoModel>? cargos;
+  const MyTable({Key? key, required this.cargos}) : super(key: key);
+
+  final List<CargoModel> cargos;
 
   @override
   State<MyTable> createState() => _MyTableState();
@@ -19,8 +17,8 @@ class _MyTableState extends State<MyTable> {
   @override
   Widget build(BuildContext context) {
     return LazyDataTable(
-      rows: widget.rowNumber ?? 4,
-      columns: widget.columnNumber ?? 6,
+      rows: widget.cargos.length,
+      columns: 5,
       tableDimensions: const LazyDataTableDimensions(
         cellHeight: 40,
         cellWidth: 150,
@@ -28,7 +26,7 @@ class _MyTableState extends State<MyTable> {
         leftHeaderWidth: 50,
       ),
       topHeaderBuilder: (i) => Container(
-        color: kPrimaryColor,
+        color: Colors.grey,
         child: Center(
             child: Text(
           tableColumns[i],
@@ -37,15 +35,15 @@ class _MyTableState extends State<MyTable> {
         )),
       ),
       leftHeaderBuilder: (i) => Container(
-          color: kPrimaryColor,
+          color: Colors.grey,
           child: Center(
               child: Text(
             " ${i + 1}",
             style: const TextStyle(color: Colors.white),
           ))),
-      dataCellBuilder: (i, j) => Center(child: Text(tableRows[i][j])),
+      dataCellBuilder: (i, j) => Center(child: Text(widget.cargos[i].row()[j])),
       topLeftCornerWidget: Container(
-          color: kPrimaryColor,
+          color: Colors.grey,
           child: const Center(
             child: Text(
               "S/No",
