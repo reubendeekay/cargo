@@ -2,6 +2,7 @@ import 'package:cargo/firebase_options.dart';
 import 'package:cargo/providers/auth_provider.dart';
 import 'package:cargo/providers/branch_provider.dart';
 import 'package:cargo/providers/cargo_provider.dart';
+import 'package:cargo/providers/location_provider.dart';
 import 'package:cargo/providers/notifications_provider.dart';
 import 'package:cargo/theme/AppSplashScreen.dart';
 import 'package:cargo/theme/app_theme.dart';
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider.value(value: LocationProvider()),
         ChangeNotifierProvider.value(value: AuthProvider()),
         ChangeNotifierProvider.value(value: CargoProvider()),
         ChangeNotifierProvider.value(value: BranchProvider()),

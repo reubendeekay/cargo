@@ -1,9 +1,11 @@
 import 'package:cargo/helpers/generator.dart';
+import 'package:cargo/helpers/url_helper.dart';
 import 'package:cargo/theme/app_theme.dart';
 import 'package:cargo/theme/custom_theme.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutx/flutx.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class FAQQuestionScreen extends StatefulWidget {
   const FAQQuestionScreen({Key? key}) : super(key: key);
@@ -158,9 +160,21 @@ class _FAQQuestionScreenState extends State<FAQQuestionScreen> {
             ),
             Container(
               margin: const EdgeInsets.only(top: 20),
-              child: Center(
-                child: FxText.bodyLarge("Still have questions?",
-                    color: theme.colorScheme.primary, fontWeight: 600),
+              child: InkWell(
+                onTap: () async {
+                  final Uri emailLaunchUri = Uri(
+                    scheme: 'mailto',
+                    path: 'mustafaibra643@gmail.com',
+                    query: encodeQueryParameters(<String, String>{
+                      'subject': 'FastGate Support Request'
+                    }),
+                  );
+                  await launch(emailLaunchUri.toString());
+                },
+                child: Center(
+                  child: FxText.bodyLarge("Still have questions?",
+                      color: theme.colorScheme.primary, fontWeight: 600),
+                ),
               ),
             )
           ],

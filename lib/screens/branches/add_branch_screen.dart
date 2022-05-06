@@ -167,7 +167,7 @@ class _AddBranchScreenState extends State<AddBranchScreen> {
                         CircleAvatar(
                             backgroundColor:
                                 theme.colorScheme.primary.withAlpha(28),
-                            child: const Icon(Icons.camera_outlined)),
+                            child: const Icon(Icons.camera_alt_outlined)),
                         const SizedBox(
                           width: 10,
                         ),
@@ -387,34 +387,36 @@ class _AddBranchScreenState extends State<AddBranchScreen> {
                           ],
                         ),
                         child: ElevatedButton(
-                          onPressed: () async {
-                            setState(() {
-                              isLoading = true;
-                            });
-                            final branch = BranchModel(
-                              name: branchName,
-                              managerName: managerName,
-                              managerId: managerId,
-                              email: emailAdress,
-                              imageFile: image,
-                              phoneNumber: phoneNumber,
-                              address: branchAdress,
-                            );
+                          onPressed: image == null
+                              ? null
+                              : () async {
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  final branch = BranchModel(
+                                    name: branchName,
+                                    managerName: managerName,
+                                    managerId: managerId,
+                                    email: emailAdress,
+                                    imageFile: image,
+                                    phoneNumber: phoneNumber,
+                                    address: branchAdress,
+                                  );
 
-                            await Provider.of<BranchProvider>(context,
-                                    listen: false)
-                                .addBranch(branch);
-                            setState(() {
-                              isLoading = false;
-                            });
-                            Navigator.of(context).pop();
+                                  await Provider.of<BranchProvider>(context,
+                                          listen: false)
+                                      .addBranch(branch);
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+                                  Navigator.of(context).pop();
 
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              content:
-                                  Text('Branch details successfully added'),
-                            ));
-                          },
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(const SnackBar(
+                                    content: Text(
+                                        'Branch details successfully added'),
+                                  ));
+                                },
                           child: isLoading
                               ? const MyLoader()
                               : FxText.bodyMedium("Add Branch",

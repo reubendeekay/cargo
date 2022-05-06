@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 
 class MyLoader extends StatelessWidget {
-  const MyLoader({Key? key}) : super(key: key);
+  const MyLoader({Key? key, this.color}) : super(key: key);
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
-    return const ColorLoader4(
-      dotOneColor: Colors.white,
-      dotTwoColor: Colors.white,
-      dotThreeColor: Colors.white,
+    return ColorLoader4(
+      dotOneColor: color ?? Colors.white,
+      dotTwoColor: color ?? Colors.white,
+      dotThreeColor: color ?? Colors.white,
       duration: const Duration(milliseconds: 1200),
     );
   }

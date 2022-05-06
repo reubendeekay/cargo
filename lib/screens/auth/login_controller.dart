@@ -11,7 +11,7 @@ class LogInController extends FxController {
   late TextEditingController emailTE, passwordTE;
   GlobalKey<FormState> formKey = GlobalKey();
   late TeddyController teddyController;
-  late final FocusNode emailNode, passwordNode;
+  FocusNode? emailNode, passwordNode;
 
   @override
   void initState() {
@@ -25,13 +25,13 @@ class LogInController extends FxController {
   }
 
   initFocusNode() {
-    emailNode.addListener(() {
-      if (emailNode.hasFocus) {
+    emailNode!.addListener(() {
+      if (emailNode!.hasFocus) {
         teddyController.coverEyes(false);
       }
     });
-    passwordNode.addListener(() {
-      if (passwordNode.hasFocus) {
+    passwordNode!.addListener(() {
+      if (passwordNode!.hasFocus) {
         teddyController.coverEyes(true);
       }
     });

@@ -27,10 +27,12 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  animated_splash_screen: ^1.2.0
   cached_network_image: ^3.2.0
   cloud_firestore: ^3.1.8
   cupertino_icons: ^1.0.2
   curved_nav_bar: ^0.0.2
+  dotted_line: ^3.1.0
   firebase_auth: ^3.3.7
   firebase_core: ^1.12.0
   firebase_database: ^9.0.4
@@ -44,17 +46,23 @@ dependencies:
   flutx:
     path: ./flutx
   font_awesome_flutter: ^9.2.0
+  geocoder2: ^1.1.0
   get: ^4.3.8
   google_fonts: ^2.1.0
   intl: ^0.17.0
   lazy_data_table: ^0.3.1
+  location: ^4.3.0
   lottie: ^1.2.1
   material_design_icons_flutter: ^5.0.6595
   media_picker_widget: ^0.0.7
   native_pdf_view: ^6.0.0+1
   nb_utils: ^4.4.17
+  page_transition: ^2.0.5
+  path_provider: ^2.0.9
   provider: ^5.0.0
+  scroll_app_bar: ^2.0.0
   shimmer: ^2.0.0
+  sqflite: ^2.0.2+1
   twilio_flutter: ^0.0.9
   url_launcher: ^6.0.20
 

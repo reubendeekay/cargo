@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cargo/models/branch_model.dart';
 import 'package:cargo/screens/branches/add_branch_screen.dart';
+import 'package:cargo/screens/branches/edit_branch_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutx/flutx.dart';
@@ -53,12 +54,19 @@ class AgentBranchTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(branch.name!),
+      onTap: () {
+        Get.to(() => EditBranchScreen(branch: branch));
+      },
       subtitle: Text('Manager: ' + branch.managerName!),
       leading: CircleAvatar(
         backgroundColor: Colors.blue,
         backgroundImage: CachedNetworkImageProvider(branch.imageUrl!),
       ),
-      trailing: const Icon(Icons.edit, size: 18),
+      trailing: InkWell(
+          onTap: () {
+            Get.to(() => EditBranchScreen(branch: branch));
+          },
+          child: const Icon(Icons.edit, size: 18)),
     );
   }
 }

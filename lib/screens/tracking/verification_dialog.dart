@@ -1,3 +1,4 @@
+import 'package:cargo/constants.dart';
 import 'package:cargo/providers/cargo_provider.dart';
 import 'package:cargo/screens/agent/dashboard/widgets/Db4Widget.dart';
 import 'package:cargo/screens/tracking/shipment_details.dart';
@@ -47,24 +48,27 @@ class _VerificationDialogState extends State<VerificationDialog> {
       ),
       width: MediaQuery.of(context).size.width,
       //height: MediaQuery.of(context).size.height * 0.8,
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(20),
       child: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min, // To make the card compact
           children: <Widget>[
-            SvgPicture.asset(
-              'assets/images/t10_ic_otp.svg',
-              width: width * 0.25,
-              height: width * 0.4,
-              fit: BoxFit.fill,
+            SizedBox(
+              height: 100,
+              child: SvgPicture.asset(
+                'assets/images/t10_ic_otp.svg',
+                width: width * 0.25,
+                height: width * 0.4,
+                fit: BoxFit.fitHeight,
+              ),
             ),
             const SizedBox(
               height: 16,
             ),
             text('We are sending a verification code to ' + cargo.phoneNumber!,
-                textColor: Colors.blueGrey, isCentered: true),
+                fontSize: 14, textColor: Colors.blueGrey, isCentered: true),
             const SizedBox(
-              height: 16,
+              height: 10,
             ),
             TextFormField(
               onChanged: (val) {
@@ -95,9 +99,11 @@ class _VerificationDialogState extends State<VerificationDialog> {
               ),
             ),
             const SizedBox(
-              height: 16,
+              height: 10,
             ),
             AppButton(
+              height: 45,
+              color: kPrimaryColor,
               onTap: () {
                 if (cargo.sms == sms) {
                   Navigator.of(context).pop();
@@ -110,6 +116,7 @@ class _VerificationDialogState extends State<VerificationDialog> {
                 }
               },
               text: 'Submit',
+              textColor: Colors.white,
             ),
             const SizedBox(
               height: 24,
@@ -118,17 +125,25 @@ class _VerificationDialogState extends State<VerificationDialog> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 text('Did not receive OTP? ',
-                    textColor: const Color(0xFF554BDF),
-                    fontFamily: 'Medium',
-                    fontSize: 14),
+                    textColor: Colors.grey, fontFamily: 'Medium', fontSize: 14),
                 const SizedBox(width: 4),
-                text('RESEND CODE', fontFamily: 'Medium', fontSize: 14)
+                InkWell(
+                    onTap: () async {
+                      await cargo.twilioFlutter!.sendSMS(
+                          toNumber: '+' + cargo.phoneNumber!,
+                          messageBody:
+                              'Dear customer, your verificication code for shipment ${cargo.cargo.docNo} is ${cargo.sms} . Fastgate cargo Services');
+                    },
+                    child: text('Enter OTP',
+                        fontFamily: 'Medium',
+                        fontSize: 14,
+                        textColor: const Color(0xFF554BDF)))
               ],
             ),
             const SizedBox(
-              height: 8,
+              height: 10,
             ),
-            text('Message sent to registred number', fontSize: 14),
+            text('Message sent to ${cargo.phoneNumber}', fontSize: 14),
           ],
         ),
       ),

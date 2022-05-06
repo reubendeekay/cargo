@@ -1,22 +1,30 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
 class CargoModel {
   final String? docNo;
   final String? customerName;
-  final String? createdAt;
+  final Timestamp? createdAt;
   final String? origin;
   final String? destination;
   final String? paymentMode;
   final String? invoiceNumber;
   final String? currentLocation;
-  final String? deliveryDate;
+  final Timestamp? deliveryDate;
   final String? userId;
-  final String? status;
+  final String? shippingFee;
+  final String? packageName;
   final String? phoneNumber;
+  CargoStatus? received;
+  CargoStatus? delivered;
+  CargoStatus? shipping;
+  CargoStatus? onDelivery;
+  CargoStatus? inShipment;
+  CargoStatus? readyForDelivery;
 
   CargoModel({
     this.docNo,
-    this.status,
+    this.packageName,
     this.customerName,
     this.phoneNumber,
     this.createdAt,
@@ -27,6 +35,13 @@ class CargoModel {
     this.currentLocation,
     this.deliveryDate,
     this.userId,
+    this.received,
+    this.delivered,
+    this.shipping,
+    this.onDelivery,
+    this.inShipment,
+    this.readyForDelivery,
+    this.shippingFee,
   });
 
   factory CargoModel.fromJson(dynamic json) => CargoModel(
@@ -38,7 +53,29 @@ class CargoModel {
         invoiceNumber: json["invoiceNumber"],
         currentLocation: json["currentLocation"],
         userId: json["userId"],
+        shippingFee: json["shippingFee"],
         phoneNumber: json["phoneNumber"],
+        customerName: json["customerName"],
+        deliveryDate: json["deliveryDate"],
+        packageName: json["packageName"],
+        delivered: json["delivered"] == null
+            ? null
+            : CargoStatus.fromJson(json["delivered"]),
+        inShipment: json["inShipment"] == null
+            ? null
+            : CargoStatus.fromJson(json["inShipment"]),
+        onDelivery: json["onDelivery"] == null
+            ? null
+            : CargoStatus.fromJson(json["onDelivery"]),
+        received: json["received"] == null
+            ? null
+            : CargoStatus.fromJson(json["received"]),
+        shipping: json["shipping"] == null
+            ? null
+            : CargoStatus.fromJson(json["shipping"]),
+        readyForDelivery: json["readyForDelivery"] == null
+            ? null
+            : CargoStatus.fromJson(json["readyForDelivery"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -51,6 +88,16 @@ class CargoModel {
         "currentLocation": currentLocation,
         "userId": userId,
         "phoneNumber": phoneNumber,
+        "customerName": customerName,
+        "deliveryDate": deliveryDate,
+        "packageName": packageName,
+        "delivered": delivered?.toJson(),
+        "inShipment": inShipment?.toJson(),
+        "onDelivery": onDelivery?.toJson(),
+        "received": received?.toJson(),
+        "shipping": shipping?.toJson(),
+        "readyForDelivery": readyForDelivery?.toJson(),
+        "shippingFee": shippingFee,
       };
 
   List<String> row() {
@@ -60,8 +107,25 @@ class CargoModel {
       destination!,
       phoneNumber!,
       currentLocation!,
-      DateFormat('dd/MMM/yyyy').format(DateTime.parse(createdAt!)),
+      DateFormat('dd/MMM/yyyy').format(createdAt!.toDate()),
       paymentMode!,
     ];
   }
+}
+
+class CargoStatus {
+  Timestamp? date;
+  String? location;
+
+  CargoStatus(this.date, this.location);
+
+  factory CargoStatus.fromJson(dynamic json) => CargoStatus(
+        json["date"],
+        json["location"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "date": date,
+        "location": location,
+      };
 }

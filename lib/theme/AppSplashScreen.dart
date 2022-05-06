@@ -1,37 +1,69 @@
+import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:cargo/constants.dart';
+import 'package:cargo/providers/cargo_provider.dart';
+import 'package:cargo/providers/location_provider.dart';
 import 'package:cargo/screens/agent/homepage.dart';
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
-import 'package:lottie/lottie.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 
 class AppSplashScreen extends StatefulWidget {
   const AppSplashScreen({Key? key}) : super(key: key);
 
   @override
-  _AppSplashScreenState createState() => _AppSplashScreenState();
+  State<AppSplashScreen> createState() => _AppSplashScreenState();
 }
 
-class _AppSplashScreenState extends State<AppSplashScreen>
-    with SingleTickerProviderStateMixin {
+class _AppSplashScreenState extends State<AppSplashScreen> {
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
-    navigationPage();
+    Future.delayed(Duration.zero, () async {
+      await Provider.of<CargoProvider>(context, listen: false)
+          .initialiseTwillio();
+      await Provider.of<LocationProvider>(context, listen: false)
+          .getCurrentLocation();
+      setOpacity();
+    });
   }
 
-  void navigationPage() async {
-    await Future.delayed(const Duration(milliseconds: 5000));
-    Get.off(() => const Homepage());
+  bool isVisible = false;
+  void setOpacity() {
+    Future.delayed(const Duration(milliseconds: 500), () {
+      setState(() {
+        isVisible = true;
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SizedBox(
-        height: double.infinity,
-        width: double.infinity,
-        child: Lottie.asset('assets/splash.json',
-            repeat: false, fit: BoxFit.cover),
-      ),
+    final size = MediaQuery.of(context).size;
+    return Stack(
+      children: [
+        AnimatedSplashScreen(
+          backgroundColor: kPrimaryColor,
+          splash: 'assets/images/logo.png',
+          centered: true,
+          nextScreen: const Homepage(),
+          splashTransition: SplashTransition.rotationTransition,
+          pageTransitionType: PageTransitionType.fade,
+        ),
+        Positioned(
+            left: 0,
+            right: 0,
+            bottom: size.height * 0.35,
+            child: AnimatedOpacity(
+              opacity: isVisible ? 1 : 0,
+              duration: const Duration(milliseconds: 1000),
+              child: Center(
+                child: SizedBox(
+                    child: Image.asset('assets/images/splash.png'), height: 50),
+              ),
+            ),
+            top: 0),
+      ],
     );
   }
 }

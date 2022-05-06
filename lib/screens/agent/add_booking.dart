@@ -1,10 +1,13 @@
+import 'package:cargo/helpers/my_loader.dart';
 import 'package:cargo/models/cargo_model.dart';
 import 'package:cargo/providers/auth_provider.dart';
 import 'package:cargo/providers/cargo_provider.dart';
 import 'package:cargo/theme/app_theme.dart';
 import 'package:cargo/theme/custom_theme.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutx/flutx.dart';
+import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -19,6 +22,8 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
   late CustomTheme customTheme;
   late ThemeData theme;
   String? invoiceNumber;
+  String? packageName;
+  String? shippingFee;
 
   String? origin;
 
@@ -28,7 +33,8 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
   String? paymentMode;
 
   String? customerName;
-  String? deliveryDate;
+  Timestamp? deliveryDate;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -150,7 +156,7 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
                     isDense: true,
                     contentPadding: const EdgeInsets.all(0),
                   ),
-                  keyboardType: TextInputType.name,
+                  keyboardType: TextInputType.phone,
                 ),
               ),
               Container(
@@ -166,7 +172,7 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
                     child: TextFormField(
                       onChanged: (val) {
                         setState(() {
-                          invoiceNumber = val;
+                          packageName = val;
                         });
                       },
                       style: FxTextStyle.titleSmall(
@@ -174,7 +180,7 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
                           color: theme.colorScheme.onBackground,
                           fontWeight: 500),
                       decoration: InputDecoration(
-                        hintText: "Invoice Number",
+                        hintText: "Package Name",
                         hintStyle: FxTextStyle.titleSmall(
                             letterSpacing: 0,
                             color: theme.colorScheme.onBackground,
@@ -198,6 +204,52 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
                         fillColor: customTheme.card,
                         prefixIcon: const Icon(
                           MdiIcons.briefcaseOutline,
+                          size: 22,
+                        ),
+                        isDense: true,
+                        contentPadding: const EdgeInsets.all(0),
+                      ),
+                      textCapitalization: TextCapitalization.sentences,
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 16),
+                    child: TextFormField(
+                      onChanged: (val) {
+                        setState(() {
+                          shippingFee = val;
+                        });
+                      },
+                      keyboardType: TextInputType.number,
+                      style: FxTextStyle.titleSmall(
+                          letterSpacing: 0,
+                          color: theme.colorScheme.onBackground,
+                          fontWeight: 500),
+                      decoration: InputDecoration(
+                        hintText: "Shipping fee",
+                        hintStyle: FxTextStyle.titleSmall(
+                            letterSpacing: 0,
+                            color: theme.colorScheme.onBackground,
+                            fontWeight: 500),
+                        border: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(4),
+                            ),
+                            borderSide: BorderSide.none),
+                        enabledBorder: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(4),
+                            ),
+                            borderSide: BorderSide.none),
+                        focusedBorder: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(4),
+                            ),
+                            borderSide: BorderSide.none),
+                        filled: true,
+                        fillColor: customTheme.card,
+                        prefixIcon: const Icon(
+                          MdiIcons.cash,
                           size: 22,
                         ),
                         isDense: true,
@@ -303,46 +355,39 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
                 child: FxText.bodyLarge("Other information",
                     fontWeight: 600, letterSpacing: 0),
               ),
-              Container(
-                margin: const EdgeInsets.only(top: 16),
-                child: TextFormField(
-                  onChanged: (val) {
-                    setState(() {
-                      deliveryDate = val;
-                    });
-                  },
-                  style: FxTextStyle.titleSmall(
-                      letterSpacing: 0,
-                      color: theme.colorScheme.onBackground,
-                      fontWeight: 500),
-                  decoration: InputDecoration(
-                    hintText: "Delivery Date",
-                    hintStyle: FxTextStyle.titleSmall(
-                        letterSpacing: 0,
-                        color: theme.colorScheme.onBackground,
-                        fontWeight: 500),
-                    border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(4),
-                        ),
-                        borderSide: BorderSide.none),
-                    enabledBorder: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(4),
-                        ),
-                        borderSide: BorderSide.none),
-                    focusedBorder: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(4),
-                        ),
-                        borderSide: BorderSide.none),
-                    filled: true,
-                    fillColor: customTheme.card,
-                    prefixIcon: const Icon(MdiIcons.timer),
-                    isDense: true,
-                    contentPadding: const EdgeInsets.all(0),
+              GestureDetector(
+                onTap: () async {
+                  final date = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime.now(),
+                      lastDate: DateTime.utc(2100, 11, 12));
+                  setState(() {
+                    deliveryDate = Timestamp.fromDate(date!);
+                  });
+                },
+                child: Container(
+                  margin: const EdgeInsets.only(top: 16),
+                  height: 48,
+                  decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(4),
+                      ),
+                      color: customTheme.card),
+                  child: Row(
+                    children: [
+                      const SizedBox(width: 10),
+                      const Icon(
+                        MdiIcons.calendar,
+                        color: Colors.grey,
+                      ),
+                      const SizedBox(width: 10),
+                      Text(deliveryDate == null
+                          ? 'Delivery Date'
+                          : DateFormat('dd/MM/yyyy')
+                              .format(deliveryDate!.toDate())),
+                    ],
                   ),
-                  textCapitalization: TextCapitalization.sentences,
                 ),
               ),
               Container(
@@ -403,30 +448,49 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
                     ),
                     child: ElevatedButton(
                       onPressed: () async {
-                        final cargo = CargoModel(
-                          createdAt: DateTime.now().toString(),
-                          customerName: customerName,
-                          currentLocation: origin,
-                          docNo: origin![0] +
-                              origin![1] +
-                              origin![2] +
-                              '/' +
-                              destinaton![0] +
-                              destinaton![1] +
-                              destinaton![2] +
-                              '/' +
-                              invoiceNumber!,
-                          userId: uid,
-                          destination: destinaton,
-                          phoneNumber: phoneNumber,
-                          invoiceNumber: invoiceNumber,
-                          origin: origin,
-                          paymentMode: paymentMode,
-                          deliveryDate: deliveryDate,
-                        );
+                        invoiceNumber = getOtp().toString();
 
-                        await Provider.of<CargoProvider>(context, listen: false)
-                            .addCargo(cargo);
+                        final cargo = CargoModel(
+                            createdAt: Timestamp.now(),
+                            customerName: customerName,
+                            currentLocation: origin,
+                            docNo: origin![0] +
+                                origin![1] +
+                                origin![2] +
+                                '/' +
+                                destinaton![0] +
+                                destinaton![1] +
+                                destinaton![2] +
+                                '/' +
+                                invoiceNumber!,
+                            userId: uid,
+                            destination: destinaton,
+                            phoneNumber: phoneNumber,
+                            invoiceNumber: invoiceNumber,
+                            origin: origin,
+                            paymentMode: paymentMode,
+                            deliveryDate: deliveryDate,
+                            packageName: packageName,
+                            shippingFee: shippingFee,
+                            received: CargoStatus(Timestamp.now(), origin));
+                        setState(() {
+                          isLoading = true;
+                        });
+                        try {
+                          await Provider.of<CargoProvider>(context,
+                                  listen: false)
+                              .addCargo(cargo);
+                        } catch (e) {
+                          setState(() {
+                            isLoading = false;
+                          });
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(e.toString()),
+                          ));
+                        }
+                        setState(() {
+                          isLoading = false;
+                        });
                         Navigator.of(context).pop();
 
                         ScaffoldMessenger.of(context)
@@ -434,8 +498,11 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
                           content: Text('Shipping details added to database'),
                         ));
                       },
-                      child: FxText.bodyMedium("Add Shipment",
-                          fontWeight: 600, color: theme.colorScheme.onPrimary),
+                      child: isLoading
+                          ? const MyLoader()
+                          : FxText.bodyMedium("Add Shipment",
+                              fontWeight: 600,
+                              color: theme.colorScheme.onPrimary),
                       style: ButtonStyle(
                           padding:
                               MaterialStateProperty.all(FxSpacing.xy(16, 0))),

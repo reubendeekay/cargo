@@ -12,19 +12,19 @@ class ShipmentTrackingStepper extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        icon(),
-        icon(
+        detail(),
+        detail(
             title: 'Transit Depot\n' + cargo.currentLocation!,
             icon: FontAwesomeIcons.planeDeparture),
-        icon(
+        detail(
           title: 'Destination Depot\n' + cargo.destination!,
           icon: FontAwesomeIcons.planeArrival,
         ),
-        icon(
+        detail(
             title: 'Dispatched Item',
             color: Colors.green,
             icon: FontAwesomeIcons.truckMoving),
-        icon(
+        detail(
             title: 'Product Delivered',
             isLast: true,
             color: Colors.red,
@@ -36,7 +36,7 @@ class ShipmentTrackingStepper extends StatelessWidget {
     );
   }
 
-  Widget icon(
+  Widget detail(
       {String? title, Color? color, bool isLast = false, IconData? icon}) {
     return Row(
       children: [

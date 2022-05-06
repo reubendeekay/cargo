@@ -130,7 +130,8 @@ class BranchContactWidget extends StatelessWidget {
     final Uri emailLaunchUri = Uri(
       scheme: 'mailto',
       path: branch.email,
-      query: encodeQueryParameters(<String, String>{'subject': 'Hello, '}),
+      query: encodeQueryParameters(
+          <String, String>{'subject': 'FastGate Support Request'}),
     );
     return Container(
       padding: FxSpacing.fromLTRB(16, 0, 16, 8),

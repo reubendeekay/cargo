@@ -16,4 +16,17 @@ class NotificationsProvider with ChangeNotifier {
         .delete();
     notifyListeners();
   }
+
+  Future<List<NotificationModel>> getNotifications() {
+    return FirebaseFirestore.instance
+        .collection('notifications')
+        .get()
+        .then((value) {
+      List<NotificationModel> notifications = [];
+      for (var doc in value.docs) {
+        notifications.add(NotificationModel.fromJson(doc));
+      }
+      return notifications;
+    });
+  }
 }

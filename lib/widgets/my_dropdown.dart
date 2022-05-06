@@ -1,5 +1,6 @@
 import 'package:cargo/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutx/flutx.dart';
 
 class MyDropDown extends StatefulWidget {
   const MyDropDown(
@@ -40,15 +41,11 @@ class _MyDropDownState extends State<MyDropDown> {
       },
       child: Container(
           margin: const EdgeInsets.symmetric(vertical: 10),
-          height: 40,
+          height: 48,
           padding: const EdgeInsets.only(left: 15, right: 10),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(3),
-            border: Border.all(
-              color: Colors.grey,
-              width: 1,
-            ),
-          ),
+              borderRadius: BorderRadius.circular(3),
+              color: const Color(0xfff0f0f0)),
           alignment: Alignment.centerLeft,
           child: Row(
             children: [
@@ -56,7 +53,7 @@ class _MyDropDownState extends State<MyDropDown> {
                 optionSelected == null ? widget.hintText! : optionSelected!,
                 style: TextStyle(
                     color: optionSelected == null ? Colors.grey : Colors.black,
-                    fontSize: 12),
+                    fontSize: 14),
               ),
               const Spacer(),
               const Icon(
@@ -87,7 +84,7 @@ class DropDownOptions extends StatelessWidget {
             onTap: () {},
             child: DraggableScrollableSheet(
                 initialChildSize: 0.3,
-                maxChildSize: 0.8,
+                maxChildSize: 0.5,
                 minChildSize: 0.1,
                 builder: (ctx, controller) => AnimatedContainer(
                     duration: const Duration(milliseconds: 500),
@@ -102,12 +99,7 @@ class DropDownOptions extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(20),
-                                    topRight: Radius.circular(20)),
-                              ),
+                              color: Colors.white,
                               width: double.infinity,
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 15, vertical: 10),
@@ -125,12 +117,10 @@ class DropDownOptions extends StatelessWidget {
                                               BorderRadius.circular(10)),
                                     ),
                                   ),
-                                  const SizedBox(height: 22),
-                                  Text(
-                                    hintText!,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        color: kPrimaryColor),
+                                  const SizedBox(height: 15),
+                                  FxText.titleMedium(
+                                    hintText!.toUpperCase(),
+                                    fontWeight: 700,
                                   ),
                                 ],
                               )),

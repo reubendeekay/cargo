@@ -23,6 +23,11 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void setUserNull() {
+    _user = null;
+    notifyListeners();
+  }
+
   Future<void> getUser(String userId) async {
     try {
       final userResults = await FirebaseFirestore.instance

@@ -23,7 +23,7 @@
   </intent>
 </queries>
    <application
-        android:label="Fastgate Cargo"
+        android:label="iCargo"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity

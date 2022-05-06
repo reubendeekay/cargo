@@ -133,14 +133,14 @@ class MyGridView extends StatelessWidget {
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3, crossAxisSpacing: 16, mainAxisSpacing: 16),
         itemBuilder: (BuildContext context, int index) {
-          return Container(
-            alignment: Alignment.center,
-            decoration:
-                boxDecoration(radius: 10, showShadow: true, bgColor: db4_white),
-            child: InkWell(
-              onTap: () {
-                dashboardList[index].onTap!();
-              },
+          return InkWell(
+            onTap: () {
+              dashboardList[index].onTap!();
+            },
+            child: Container(
+              alignment: Alignment.center,
+              decoration: boxDecoration(
+                  radius: 10, showShadow: true, bgColor: db4_white),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[

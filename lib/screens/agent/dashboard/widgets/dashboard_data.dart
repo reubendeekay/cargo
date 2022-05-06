@@ -1,3 +1,4 @@
+import 'package:cargo/screens/agent/update_shipment_screen.dart';
 import 'package:cargo/screens/branches/agent_branches.dart';
 import 'package:cargo/screens/agent/widgets/directory_screen.dart';
 import 'package:cargo/screens/agent/dashboard/widgets/dashboard_tile_model.dart';
@@ -29,10 +30,17 @@ List<DashboardTileModel> getDashboardTiles() {
       ));
 
   list.add(category2);
+  var category6 = DashboardTileModel();
+  category6.name = "Update";
+  category6.color = db4_cat_6;
+  category6.icon = db4_coupon;
+  category6.onTap = () => Get.to(() => const UpdateShipmentScreen());
+
+  list.add(category6);
   var category3 = DashboardTileModel();
   category3.name = "Agents";
   category3.color = db4_cat_3;
-  category3.icon = db4_coupon;
+  category3.icon = db4_user;
   category3.onTap = () => Get.to(() => const AgentsManagement());
 
   list.add(category3);
