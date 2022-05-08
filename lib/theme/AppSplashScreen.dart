@@ -20,8 +20,6 @@ class _AppSplashScreenState extends State<AppSplashScreen> {
     // TODO: implement initState
     super.initState();
     Future.delayed(Duration.zero, () async {
-      await Provider.of<CargoProvider>(context, listen: false)
-          .initialiseTwillio();
       await Provider.of<LocationProvider>(context, listen: false)
           .getCurrentLocation();
       setOpacity();
@@ -30,7 +28,7 @@ class _AppSplashScreenState extends State<AppSplashScreen> {
 
   bool isVisible = false;
   void setOpacity() {
-    Future.delayed(const Duration(milliseconds: 500), () {
+    Future.delayed(const Duration(milliseconds: 300), () {
       setState(() {
         isVisible = true;
       });
@@ -45,6 +43,7 @@ class _AppSplashScreenState extends State<AppSplashScreen> {
         AnimatedSplashScreen(
           backgroundColor: kPrimaryColor,
           splash: 'assets/images/logo.png',
+          duration: 3000,
           centered: true,
           nextScreen: const Homepage(),
           splashTransition: SplashTransition.rotationTransition,

@@ -1,8 +1,11 @@
 import 'package:cargo/constants.dart';
 import 'package:cargo/helpers/database.dart';
 import 'package:cargo/helpers/my_loader.dart';
+import 'package:cargo/providers/cargo_provider.dart';
+import 'package:cargo/screens/tracking/verification_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutx/flutx.dart';
+import 'package:provider/provider.dart';
 
 class SearchHistory extends StatelessWidget {
   const SearchHistory({Key? key}) : super(key: key);
@@ -62,6 +65,18 @@ class SearchHistoryWidget extends StatelessWidget {
       leading: const Icon(Icons.search),
       title: FxText.titleMedium(word.word!),
       trailing: const Icon(Icons.north_west),
+      onTap: () async {
+        try {
+          await Provider.of<CargoProvider>(context, listen: false)
+              .getShipment(word.word!);
+          showDialog(
+              context: context, builder: (ctx) => const VerificationDialog());
+        } catch (e) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Something went wrong"),
+          ));
+        }
+      },
     );
   }
 }

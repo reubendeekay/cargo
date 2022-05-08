@@ -64,8 +64,8 @@ class ShipmentDetails extends StatelessWidget {
                     'Tracking No: '
                     '${cargo.docNo!}'),
                 const SizedBox(height: 20),
-                trackingWidget(
-                    cargo.destination!, 'Package: ' + cargo.packageName!),
+                trackingWidget(cargo.destination!,
+                    'Package: ' + cargo.packageName! + ' - ' + cargo.weight!),
                 const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -244,14 +244,14 @@ class ShipmentDetails extends StatelessWidget {
           width: 15,
         ),
         Expanded(
-            child: trackingWidget(
-                title ?? 'Shipping received', value ?? cargo.origin!,
+            child: trackingWidget(title ?? 'Shipping received', value ?? '',
                 hasIcon: false, isNull: isNull)),
-        trackingWidget(
-            DateFormat('dd MMM').format(time ?? cargo.createdAt!.toDate()),
-            DateFormat('HH:mm').format(time ?? cargo.createdAt!.toDate()),
-            hasIcon: false,
-            isNull: isNull),
+        if (!isNull)
+          trackingWidget(
+              DateFormat('dd MMM').format(time ?? cargo.createdAt!.toDate()),
+              DateFormat('HH:mm').format(time ?? cargo.createdAt!.toDate()),
+              hasIcon: false,
+              isNull: isNull),
       ],
     );
   }

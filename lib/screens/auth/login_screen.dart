@@ -23,6 +23,7 @@ class _LogInScreenState extends State<LogInScreen>
   late LogInController controller;
   late OutlineInputBorder outlineInputBorder;
   bool isLoading = false;
+  bool isShown = false;
 
   @override
   void initState() {
@@ -100,6 +101,7 @@ class _LogInScreenState extends State<LogInScreen>
                         FxSpacing.height(20),
                         TrackingTextInput(
                           style: FxTextStyle.bodyMedium(),
+                          isObscured: !isShown,
                           decoration: InputDecoration(
                               floatingLabelBehavior:
                                   FloatingLabelBehavior.never,
@@ -110,6 +112,17 @@ class _LogInScreenState extends State<LogInScreen>
                                 Icons.lock_outline,
                                 color: theme.colorScheme.onBackground,
                               ),
+                              suffixIcon: InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      isShown = !isShown;
+                                    });
+                                  },
+                                  child: Icon(
+                                    isShown
+                                        ? Icons.visibility_off_outlined
+                                        : Icons.remove_red_eye_outlined,
+                                  )),
                               hintText: "Password",
                               enabledBorder: outlineInputBorder,
                               focusedBorder: outlineInputBorder,

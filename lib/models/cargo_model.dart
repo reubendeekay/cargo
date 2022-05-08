@@ -13,6 +13,7 @@ class CargoModel {
   final Timestamp? deliveryDate;
   final String? userId;
   final String? shippingFee;
+  final String? weight;
   final String? packageName;
   final String? phoneNumber;
   CargoStatus? received;
@@ -42,6 +43,7 @@ class CargoModel {
     this.inShipment,
     this.readyForDelivery,
     this.shippingFee,
+    this.weight,
   });
 
   factory CargoModel.fromJson(dynamic json) => CargoModel(
@@ -58,6 +60,7 @@ class CargoModel {
         customerName: json["customerName"],
         deliveryDate: json["deliveryDate"],
         packageName: json["packageName"],
+        weight: json["weight"] + ' Kg',
         delivered: json["delivered"] == null
             ? null
             : CargoStatus.fromJson(json["delivered"]),
@@ -98,6 +101,7 @@ class CargoModel {
         "shipping": shipping?.toJson(),
         "readyForDelivery": readyForDelivery?.toJson(),
         "shippingFee": shippingFee,
+        "weight": weight,
       };
 
   List<String> row() {

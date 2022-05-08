@@ -51,6 +51,7 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    Provider.of<CargoProvider>(context, listen: false).initialiseTwillio();
     return Scaffold(
       appBar: ScrollAppBar(
         controller: controller,

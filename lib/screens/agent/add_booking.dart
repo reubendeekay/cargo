@@ -25,6 +25,7 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
   String? invoiceNumber;
   String? packageName;
   String? shippingFee;
+  String? weight;
 
   String? origin;
 
@@ -211,6 +212,52 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
                         isDense: true,
                         contentPadding: const EdgeInsets.all(0),
                       ),
+                      textCapitalization: TextCapitalization.sentences,
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 16),
+                    child: TextFormField(
+                      onChanged: (val) {
+                        setState(() {
+                          weight = val;
+                        });
+                      },
+                      style: FxTextStyle.titleSmall(
+                          letterSpacing: 0,
+                          color: theme.colorScheme.onBackground,
+                          fontWeight: 500),
+                      decoration: InputDecoration(
+                        hintText: "Weight in Kg",
+                        hintStyle: FxTextStyle.titleSmall(
+                            letterSpacing: 0,
+                            color: theme.colorScheme.onBackground,
+                            fontWeight: 500),
+                        border: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(4),
+                            ),
+                            borderSide: BorderSide.none),
+                        enabledBorder: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(4),
+                            ),
+                            borderSide: BorderSide.none),
+                        focusedBorder: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(4),
+                            ),
+                            borderSide: BorderSide.none),
+                        filled: true,
+                        fillColor: customTheme.card,
+                        prefixIcon: const Icon(
+                          MdiIcons.weightKilogram,
+                          size: 22,
+                        ),
+                        isDense: true,
+                        contentPadding: const EdgeInsets.all(0),
+                      ),
+                      keyboardType: TextInputType.number,
                       textCapitalization: TextCapitalization.sentences,
                     ),
                   ),
@@ -441,6 +488,7 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
                                 destinaton![2] +
                                 '/' +
                                 invoiceNumber!,
+                            weight: weight,
                             userId: uid,
                             destination: destinaton,
                             phoneNumber: phoneNumber,
