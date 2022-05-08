@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 
 class BranchProvider with ChangeNotifier {
+  List<BranchModel> branches = [];
   Future<void> addBranch(BranchModel branch) async {
     final ref = FirebaseFirestore.instance.collection('branches').doc();
     final upload = await FirebaseStorage.instance
@@ -35,6 +36,14 @@ class BranchProvider with ChangeNotifier {
         .collection('branches')
         .doc(branch.id)
         .update(branch.toJson());
+    notifyListeners();
+  }
+
+  Future<void> getBranches() async {
+    final snapshot =
+        await FirebaseFirestore.instance.collection('branches').get();
+
+    branches = snapshot.docs.map((doc) => BranchModel.fromJson(doc)).toList();
     notifyListeners();
   }
 }

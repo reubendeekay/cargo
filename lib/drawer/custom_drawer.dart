@@ -3,10 +3,12 @@ import 'package:cargo/drawer/bottom_user_info.dart';
 import 'package:cargo/drawer/custom_list_tile.dart';
 import 'package:cargo/drawer/header.dart';
 import 'package:cargo/providers/auth_provider.dart';
+import 'package:cargo/screens/about_screen.dart';
 import 'package:cargo/screens/agent/agent_dashboard.dart';
 import 'package:cargo/screens/agent/search_history.dart';
 import 'package:cargo/screens/auth/login_screen.dart';
 import 'package:cargo/screens/branches/branch_contacts.dart';
+import 'package:cargo/screens/branches/branches_screen.dart';
 import 'package:cargo/screens/faq_question_screen.dart';
 import 'package:cargo/screens/inquiry_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -76,7 +78,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   setState(() {
                     index = 2;
                   });
-                  Get.to(() => const BranchContactsScreen());
+                  Get.to(() => const BranchesScreen());
                 },
                 infoCount: 0,
                 doHaveMoreOptions: Icons.arrow_forward_ios,
@@ -92,7 +94,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   });
                   Get.to(() => const EnquiryScreen());
                 },
-                infoCount: 8,
+                infoCount: 0,
               ),
               CustomListTile(
                 isCollapsed: _isCollapsed,
@@ -115,12 +117,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 icon: Icons.notifications,
                 title: 'About Us',
                 isSelected: index == 5,
-                infoCount: 2,
+                infoCount: 1,
                 onTap: () {
                   setState(() {
                     index = 5;
                   });
-                  Get.to(() => const FAQQuestionScreen());
+                  Get.to(() => const AboutScreen());
                 },
               ),
               CustomListTile(

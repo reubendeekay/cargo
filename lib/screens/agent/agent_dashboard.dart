@@ -124,6 +124,7 @@ class MyGridView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
+    final user = Provider.of<AuthProvider>(context, listen: false).user;
     return GridView.builder(
         scrollDirection: Axis.vertical,
         physics: isScrollable
@@ -135,7 +136,13 @@ class MyGridView extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
             onTap: () {
-              dashboardList[index].onTap!();
+              if (user!.role?.toLowerCase() != 'agent') {
+                dashboardList[index].onTap!();
+              }
+
+              if (user.role?.toLowerCase() == 'agent' && index == 1) {
+                dashboardList[index].onTap!();
+              }
             },
             child: Container(
               alignment: Alignment.center,
@@ -150,7 +157,11 @@ class MyGridView extends StatelessWidget {
                     margin: const EdgeInsets.only(bottom: 4, top: 8),
                     padding: EdgeInsets.all(width / 30),
                     decoration: boxDecoration(
-                        bgColor: dashboardList[index].color!, radius: 10),
+                        bgColor:
+                            user!.role?.toLowerCase() == 'agent' && index != 1
+                                ? Colors.grey
+                                : dashboardList[index].color!,
+                        radius: 10),
                     child: SvgPicture.asset(
                       dashboardList[index].icon,
                       color: db4_white,

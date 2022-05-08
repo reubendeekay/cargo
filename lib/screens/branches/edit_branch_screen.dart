@@ -58,7 +58,8 @@ class _EditBranchScreenState extends State<EditBranchScreen> {
               color: theme.colorScheme.onBackground,
             ),
           ),
-          title: FxText.titleMedium("Add Branch", fontWeight: 600),
+          title: FxText.titleMedium("Edit ${widget.branch.name} Branch",
+              fontWeight: 600),
         ),
         body: ListView(padding: FxSpacing.nTop(20), children: <Widget>[
           FxText.bodyLarge("General information",
@@ -409,6 +410,8 @@ class _EditBranchScreenState extends State<EditBranchScreen> {
                                   phoneNumber ?? widget.branch.phoneNumber,
                               address: branchAdress ?? widget.branch.address,
                               imageUrl: widget.branch.imageUrl,
+                              country: widget.branch.country,
+                              region: widget.branch.region,
                             );
 
                             await Provider.of<BranchProvider>(context,

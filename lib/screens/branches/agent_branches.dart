@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cargo/constants.dart';
 import 'package:cargo/models/branch_model.dart';
 import 'package:cargo/screens/branches/add_branch_screen.dart';
 import 'package:cargo/screens/branches/edit_branch_screen.dart';
@@ -66,7 +67,11 @@ class AgentBranchTile extends StatelessWidget {
           onTap: () {
             Get.to(() => EditBranchScreen(branch: branch));
           },
-          child: const Icon(Icons.edit, size: 18)),
+          child: Container(
+              padding: const EdgeInsets.all(5),
+              decoration: const BoxDecoration(
+                  shape: BoxShape.circle, color: kPrimaryColor),
+              child: const Icon(Icons.edit, size: 18, color: Colors.white))),
     );
   }
 }

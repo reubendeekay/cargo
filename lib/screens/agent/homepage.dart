@@ -1,9 +1,13 @@
 import 'package:cargo/constants.dart';
 import 'package:cargo/drawer/custom_drawer.dart';
+import 'package:cargo/providers/branch_provider.dart';
 import 'package:cargo/providers/cargo_provider.dart';
 import 'package:cargo/providers/location_provider.dart';
+import 'package:cargo/screens/about_screen.dart';
 import 'package:cargo/screens/agent/service_card.dart';
+import 'package:cargo/screens/agent/services_screen.dart';
 import 'package:cargo/screens/agent/user_notifications.dart';
+import 'package:cargo/screens/branches/branches_screen.dart';
 import 'package:cargo/screens/faq_question_screen.dart';
 import 'package:cargo/models/notification_model.dart';
 import 'package:cargo/screens/auth/login_screen.dart';
@@ -152,19 +156,41 @@ class _HomepageState extends State<Homepage> {
                                 }
                               },
                               decoration: InputDecoration(
-                                fillColor: Colors.white,
-                                filled: true,
-                                hintText: 'Enter tracking number',
-                                hintStyle: const TextStyle(
-                                  fontSize: 13,
-                                  color: Colors.black,
-                                ),
-                                border: InputBorder.none,
-                                prefixIcon: Icon(
-                                  Icons.track_changes_rounded,
-                                  color: Colors.red.withOpacity(0.8),
-                                ),
-                              ),
+                                  fillColor: Colors.white,
+                                  filled: true,
+                                  hintText: 'Enter tracking number',
+                                  hintStyle: const TextStyle(
+                                    fontSize: 13,
+                                    color: Colors.black,
+                                  ),
+                                  border: InputBorder.none,
+                                  prefixIcon: Icon(
+                                    Icons.track_changes_rounded,
+                                    color: Colors.red.withOpacity(0.8),
+                                  ),
+                                  suffixIcon: InkWell(
+                                      onTap: () async {
+                                        if (formKey.currentState!.validate()) {
+                                          try {
+                                            await Provider.of<CargoProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .getShipment(trackingNumber!);
+                                            showDialog(
+                                                context: context,
+                                                builder: (ctx) =>
+                                                    const VerificationDialog());
+                                          } catch (e) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(const SnackBar(
+                                              content:
+                                                  Text("Something went wrong"),
+                                            ));
+                                          }
+                                        }
+                                      },
+                                      child: const Icon(Icons.search,
+                                          color: kPrimaryColor))),
                             ),
                           )
                         ],
@@ -180,7 +206,7 @@ class _HomepageState extends State<Homepage> {
                     fontWeight: 600, letterSpacing: 0.3)),
             GridView.count(
               shrinkWrap: true,
-              physics: const ClampingScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               crossAxisCount: 2,
               padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
               mainAxisSpacing: 20,
@@ -191,23 +217,16 @@ class _HomepageState extends State<Homepage> {
                   title: 'Freight',
                   description: 'Air/Sea freight',
                   image: 'call.png',
-                  onTap: () async {
-                    if (FirebaseAuth.instance.currentUser != null) {
-                      final userData =
-                          Provider.of<AuthProvider>(context, listen: false);
-                      userData.user == null
-                          ? await userData.getUser(uid)
-                          : null;
-                      Get.to(() => const AgentDashboard());
-                    } else {
-                      Get.to(() => const LogInScreen());
-                    }
+                  onTap: () {
+                    Get.to(() => const ServicesScreen());
                   },
                 ),
                 ServiceCard(
                   image: 'truck.png',
-                  onTap: () {
-                    Get.to(() => const BranchContactsScreen());
+                  onTap: () async {
+                    await Provider.of<BranchProvider>(context, listen: false)
+                        .getBranches();
+                    Get.to(() => const BranchesScreen());
                   },
                 ),
                 ServiceCard(
@@ -223,7 +242,7 @@ class _HomepageState extends State<Homepage> {
                   description: 'About Us',
                   image: 'about.png',
                   onTap: () {
-                    Get.to(() => const FAQQuestionScreen());
+                    Get.to(() => const AboutScreen());
                   },
                 ),
               ],

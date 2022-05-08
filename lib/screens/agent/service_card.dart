@@ -26,6 +26,7 @@ class ServiceCard extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 28,
+              backgroundColor: Colors.grey[400],
               backgroundImage: AssetImage('assets/images/' + image!),
             ),
             const SizedBox(

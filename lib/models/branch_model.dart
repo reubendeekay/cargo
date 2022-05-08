@@ -1,12 +1,13 @@
 import 'dart:io';
 
-
 class BranchModel {
   final String? name;
   final String? address;
+  final String? country;
+  final String? region;
   final String? phoneNumber;
   final String? email;
-   String? imageUrl;
+  String? imageUrl;
   final String? id;
   final File? imageFile;
   final String? managerId;
@@ -21,7 +22,9 @@ class BranchModel {
       this.imageFile,
       this.id,
       this.managerId,
-      this.managerName});
+      this.managerName,
+      this.country,
+      this.region});
 
   factory BranchModel.fromJson(dynamic json) {
     return BranchModel(
@@ -33,6 +36,8 @@ class BranchModel {
       id: json.id,
       managerId: json['managerId'],
       managerName: json['managerName'],
+      country: json['country'],
+      region: json['region'],
     );
   }
 
@@ -45,6 +50,8 @@ class BranchModel {
       'imageUrl': imageUrl,
       'managerId': managerId,
       'managerName': managerName,
+      'country': country,
+      'region': region,
     };
   }
 }

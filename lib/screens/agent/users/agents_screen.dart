@@ -2,9 +2,11 @@ import 'package:cargo/helpers/cached_image.dart';
 import 'package:cargo/models/user_model.dart';
 import 'package:cargo/screens/agent/users/add_agent_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutx/flutx.dart';
 import 'package:get/route_manager.dart';
+import 'package:http/http.dart' as http;
 
 class AgentsManagement extends StatelessWidget {
   const AgentsManagement({Key? key}) : super(key: key);
@@ -83,6 +85,7 @@ class AgentCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
             width: size.width * 0.25,
@@ -95,26 +98,68 @@ class AgentCard extends StatelessWidget {
           const SizedBox(
             width: 10,
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              detail(Icons.person_outline, user.fullName!),
-              const SizedBox(
-                height: 5,
-              ),
-              detail(Icons.email_outlined, user.email!),
-              const SizedBox(
-                height: 5,
-              ),
-              detail(Icons.phone, user.phoneNumber!),
-              const SizedBox(
-                height: 5,
-              ),
-              detail(Icons.apartment_outlined, user.branch!),
-              const SizedBox(
-                height: 5,
-              ),
-            ],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                detail(Icons.person_outline, user.fullName!),
+                const SizedBox(
+                  height: 5,
+                ),
+                detail(Icons.email_outlined, user.email!),
+                const SizedBox(
+                  height: 5,
+                ),
+                detail(Icons.phone, user.phoneNumber!),
+                const SizedBox(
+                  height: 5,
+                ),
+                detail(Icons.apartment_outlined, user.branch!),
+                const SizedBox(
+                  height: 5,
+                ),
+              ],
+            ),
+          ),
+          PopupMenuButton(
+            icon: const Icon(Icons.more_vert),
+            onSelected: (i) async {
+              if (i == 0) {
+                final res = await http.post(
+                    Uri.parse(
+                        'https://us-central1-cargo-9420a.cloudfunctions.net/deleteUser'),
+                    body: {
+                      'uid': user.userId,
+                    });
+
+                if (res.statusCode == 200) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      backgroundColor: Colors.green,
+                      content: FxText.titleMedium(
+                        'User deleted successfully',
+                        color: Colors.white,
+                      )));
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      backgroundColor: Colors.red,
+                      content: FxText.titleMedium(
+                        'Error deleting user',
+                        color: Colors.white,
+                      )));
+                }
+              }
+            },
+            itemBuilder: (i) {
+              return [
+                PopupMenuItem(
+                  value: 0,
+                  child: FxText.titleMedium(
+                    'Delete',
+                    color: Colors.red,
+                  ),
+                ),
+              ];
+            },
           )
         ],
       ),

@@ -68,9 +68,11 @@ class _BottomUserInfoState extends State<BottomUserInfo> {
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(20),
                                 child: cachedImage(
-                                  user != null
+                                  user != null &&
+                                          FirebaseAuth.instance.currentUser !=
+                                              null
                                       ? user.profilePic!
-                                      : 'https://t3.ftcdn.net/jpg/02/99/21/98/360_F_299219888_2E7GbJyosu0UwAzSGrpIxS0BrmnTCdo4.jpg',
+                                      : 'https://www.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png',
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -86,7 +88,12 @@ class _BottomUserInfoState extends State<BottomUserInfo> {
                                   child: Align(
                                     alignment: Alignment.bottomLeft,
                                     child: Text(
-                                      user == null ? 'Guest' : user.fullName!,
+                                      user == null &&
+                                              FirebaseAuth
+                                                      .instance.currentUser ==
+                                                  null
+                                          ? 'Guest'
+                                          : user!.fullName!,
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
@@ -99,9 +106,11 @@ class _BottomUserInfoState extends State<BottomUserInfo> {
                                 ),
                                 Expanded(
                                   child: Text(
-                                    user == null
+                                    user == null &&
+                                            FirebaseAuth.instance.currentUser ==
+                                                null
                                         ? 'User'
-                                        : user.role!.toUpperCase(),
+                                        : user!.role!.toUpperCase(),
                                     style: const TextStyle(
                                       color: Colors.grey,
                                     ),
@@ -125,8 +134,7 @@ class _BottomUserInfoState extends State<BottomUserInfo> {
                                     Provider.of<AuthProvider>(context,
                                             listen: false)
                                         .setUserNull();
-
-                                    Get.offAll(() => const Homepage());
+                                    Navigator.of(context).pop();
                                   }
                                 },
                                 icon: const Icon(
@@ -153,9 +161,11 @@ class _BottomUserInfoState extends State<BottomUserInfo> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(20),
                               child: cachedImage(
-                                user != null
+                                user != null &&
+                                        FirebaseAuth.instance.currentUser !=
+                                            null
                                     ? user.profilePic!
-                                    : 'https://t3.ftcdn.net/jpg/02/99/21/98/360_F_299219888_2E7GbJyosu0UwAzSGrpIxS0BrmnTCdo4.jpg',
+                                    : 'https://www.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png',
                                 fit: BoxFit.cover,
                               ),
                             ),

@@ -4,6 +4,7 @@ import 'package:cargo/providers/auth_provider.dart';
 import 'package:cargo/providers/cargo_provider.dart';
 import 'package:cargo/theme/app_theme.dart';
 import 'package:cargo/theme/custom_theme.dart';
+import 'package:cargo/widgets/my_dropdown.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutx/flutx.dart';
@@ -31,6 +32,7 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
   String? phoneNumber;
 
   String? paymentMode;
+  String? freight;
 
   String? customerName;
   Timestamp? deliveryDate;
@@ -355,6 +357,15 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
                 child: FxText.bodyLarge("Other information",
                     fontWeight: 600, letterSpacing: 0),
               ),
+              MyDropDown(
+                selectedOption: (val) {
+                  setState(() {
+                    freight = val;
+                  });
+                },
+                options: modeOfShipment,
+                hintText: "Mode of Shipment",
+              ),
               GestureDetector(
                 onTap: () async {
                   final date = await showDatePicker(
@@ -367,7 +378,7 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
                   });
                 },
                 child: Container(
-                  margin: const EdgeInsets.only(top: 16),
+                  margin: const EdgeInsets.only(top: 5),
                   height: 48,
                   decoration: BoxDecoration(
                       borderRadius: const BorderRadius.all(
@@ -390,47 +401,14 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
                   ),
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.only(top: 12),
-                child: TextFormField(
-                  onChanged: (val) {
-                    setState(() {
-                      paymentMode = val;
-                    });
-                  },
-                  style: FxTextStyle.titleSmall(
-                      letterSpacing: 0,
-                      color: theme.colorScheme.onBackground,
-                      fontWeight: 500),
-                  decoration: InputDecoration(
-                    hintText: " Payment Method",
-                    hintStyle: FxTextStyle.titleSmall(
-                        letterSpacing: 0,
-                        color: theme.colorScheme.onBackground,
-                        fontWeight: 500),
-                    border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(4),
-                        ),
-                        borderSide: BorderSide.none),
-                    enabledBorder: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(4),
-                        ),
-                        borderSide: BorderSide.none),
-                    focusedBorder: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(4),
-                        ),
-                        borderSide: BorderSide.none),
-                    filled: true,
-                    fillColor: customTheme.card,
-                    prefixIcon: const Icon(MdiIcons.creditCardOutline),
-                    isDense: true,
-                    contentPadding: const EdgeInsets.all(0),
-                  ),
-                  textCapitalization: TextCapitalization.sentences,
-                ),
+              MyDropDown(
+                selectedOption: (val) {
+                  setState(() {
+                    paymentMode = val;
+                  });
+                },
+                options: paymentMethod,
+                hintText: "Payment Method",
               ),
               Container(
                 margin: const EdgeInsets.only(top: 24),
@@ -517,3 +495,14 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
     );
   }
 }
+
+List<String> modeOfShipment = [
+  'Air',
+  'Sea',
+];
+
+List<String> paymentMethod = [
+  'Cash',
+  'Credit',
+  'Cheque',
+];

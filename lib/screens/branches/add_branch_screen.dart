@@ -5,6 +5,7 @@ import 'package:cargo/models/branch_model.dart';
 import 'package:cargo/providers/branch_provider.dart';
 import 'package:cargo/theme/app_theme.dart';
 import 'package:cargo/theme/custom_theme.dart';
+import 'package:cargo/widgets/my_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutx/flutx.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -32,9 +33,56 @@ class _AddBranchScreenState extends State<AddBranchScreen> {
 
   String? branchName;
   String? managerName;
+  String? country;
+  String? region;
   File? image;
   List<Media> mediaList = [];
   bool isLoading = false;
+  int selectedIndex = 0;
+
+  List<Map<String, dynamic>> countries = [
+    {
+      'country': 'Kenya',
+      'regions': [
+        'Nairobi',
+        'Mombasa',
+        'Nakuru',
+        'Eldoret',
+        'Kisumu',
+      ]
+    },
+    {
+      'country': 'China',
+      'regions': [
+        'Guangzhou',
+        'Yiwu',
+      ]
+    },
+    {
+      'country': 'Quatar',
+      'regions': [
+        'Dubai',
+      ]
+    },
+    {
+      'country': 'Turkey',
+      'regions': [
+        'Istanbul',
+      ]
+    },
+    {
+      'country': 'India',
+      'regions': [
+        'Mumbai',
+      ],
+    },
+    {
+      'country': 'United Kingdom',
+      'regions': [
+        'London',
+      ],
+    }
+  ];
 
   @override
   void initState() {
@@ -65,131 +113,127 @@ class _AddBranchScreenState extends State<AddBranchScreen> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Container(
-                margin: const EdgeInsets.only(top: 16),
-                child: TextFormField(
-                  onChanged: (val) {
-                    setState(() {
-                      branchName = val;
-                    });
-                  },
-                  style: FxTextStyle.titleSmall(
-                      letterSpacing: 0,
-                      color: theme.colorScheme.onBackground,
-                      fontWeight: 500),
-                  decoration: InputDecoration(
-                    hintText: "Branch Name",
-                    hintStyle: FxTextStyle.titleSmall(
-                        letterSpacing: 0,
-                        color: theme.colorScheme.onBackground,
-                        fontWeight: 500),
-                    border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(4),
-                        ),
-                        borderSide: BorderSide.none),
-                    enabledBorder: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(4),
-                        ),
-                        borderSide: BorderSide.none),
-                    focusedBorder: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(4),
-                        ),
-                        borderSide: BorderSide.none),
-                    filled: true,
-                    fillColor: customTheme.card,
-                    prefixIcon: const Icon(
-                      MdiIcons.domain,
-                      size: 22,
-                    ),
-                    isDense: true,
-                    contentPadding: const EdgeInsets.all(0),
-                  ),
-                  keyboardType: TextInputType.emailAddress,
-                  textCapitalization: TextCapitalization.sentences,
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(top: 12),
-                child: TextFormField(
-                  onChanged: (val) {
-                    setState(() {
-                      branchAdress = val;
-                    });
-                  },
-                  style: FxTextStyle.titleSmall(
-                      letterSpacing: 0,
-                      color: theme.colorScheme.onBackground,
-                      fontWeight: 500),
-                  decoration: InputDecoration(
-                    hintText: "Address",
-                    hintStyle: FxTextStyle.titleSmall(
-                        letterSpacing: 0,
-                        color: theme.colorScheme.onBackground,
-                        fontWeight: 500),
-                    border: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(4),
-                        ),
-                        borderSide: BorderSide.none),
-                    enabledBorder: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(4),
-                        ),
-                        borderSide: BorderSide.none),
-                    focusedBorder: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(4),
-                        ),
-                        borderSide: BorderSide.none),
-                    filled: true,
-                    fillColor: customTheme.card,
-                    prefixIcon: const Icon(
-                      MdiIcons.locationEnter,
-                      size: 22,
-                    ),
-                    isDense: true,
-                    contentPadding: const EdgeInsets.all(0),
-                  ),
-                  keyboardType: TextInputType.name,
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  openImagePicker(context);
+              MyDropDown(
+                selectedOption: (val) {
+                  final all =
+                      countries.map((e) => e['country'].toString()).toList();
+                  setState(() {
+                    selectedIndex = all.indexOf(val);
+                    country = val;
+                  });
                 },
-                child: Container(
-                    margin: const EdgeInsets.only(top: 12),
-                    child: Row(
-                      children: [
-                        CircleAvatar(
-                            backgroundColor:
-                                theme.colorScheme.primary.withAlpha(28),
-                            child: const Icon(Icons.camera_alt_outlined)),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        const Text('Profile Image'),
-                        const Spacer(),
-                        Icon(
-                          Icons.check_circle,
-                          color: image == null
-                              ? theme.colorScheme.primary.withAlpha(28)
-                              : Colors.green,
-                        )
-                      ],
-                    )),
+                hintText: "Select country",
+                options: countries.map((e) => e['country'].toString()).toList(),
               ),
+              if (country != null)
+                MyDropDown(
+                  selectedOption: (val) {
+                    setState(() {
+                      region = val;
+                    });
+                  },
+                  hintText: "Select region",
+                  options: countries[selectedIndex]['regions'],
+                ),
               Container(
-                margin: const EdgeInsets.only(top: 24, bottom: 0),
+                margin: const EdgeInsets.only(top: 14, bottom: 0),
                 child: FxText.bodyLarge("Branch information",
                     fontWeight: 600, letterSpacing: 0),
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+                  Container(
+                    margin: const EdgeInsets.only(top: 16),
+                    child: TextFormField(
+                      onChanged: (val) {
+                        setState(() {
+                          branchName = val;
+                        });
+                      },
+                      style: FxTextStyle.titleSmall(
+                          letterSpacing: 0,
+                          color: theme.colorScheme.onBackground,
+                          fontWeight: 500),
+                      decoration: InputDecoration(
+                        hintText: "Branch Name",
+                        hintStyle: FxTextStyle.titleSmall(
+                            letterSpacing: 0,
+                            color: theme.colorScheme.onBackground,
+                            fontWeight: 500),
+                        border: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(4),
+                            ),
+                            borderSide: BorderSide.none),
+                        enabledBorder: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(4),
+                            ),
+                            borderSide: BorderSide.none),
+                        focusedBorder: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(4),
+                            ),
+                            borderSide: BorderSide.none),
+                        filled: true,
+                        fillColor: customTheme.card,
+                        prefixIcon: const Icon(
+                          MdiIcons.domain,
+                          size: 22,
+                        ),
+                        isDense: true,
+                        contentPadding: const EdgeInsets.all(0),
+                      ),
+                      keyboardType: TextInputType.emailAddress,
+                      textCapitalization: TextCapitalization.sentences,
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 12),
+                    child: TextFormField(
+                      onChanged: (val) {
+                        setState(() {
+                          branchAdress = val;
+                        });
+                      },
+                      style: FxTextStyle.titleSmall(
+                          letterSpacing: 0,
+                          color: theme.colorScheme.onBackground,
+                          fontWeight: 500),
+                      decoration: InputDecoration(
+                        hintText: "Address",
+                        hintStyle: FxTextStyle.titleSmall(
+                            letterSpacing: 0,
+                            color: theme.colorScheme.onBackground,
+                            fontWeight: 500),
+                        border: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(4),
+                            ),
+                            borderSide: BorderSide.none),
+                        enabledBorder: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(4),
+                            ),
+                            borderSide: BorderSide.none),
+                        focusedBorder: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(4),
+                            ),
+                            borderSide: BorderSide.none),
+                        filled: true,
+                        fillColor: customTheme.card,
+                        prefixIcon: const Icon(
+                          MdiIcons.locationEnter,
+                          size: 22,
+                        ),
+                        isDense: true,
+                        contentPadding: const EdgeInsets.all(0),
+                      ),
+                      keyboardType: TextInputType.name,
+                    ),
+                  ),
                   Container(
                     margin: const EdgeInsets.only(top: 16),
                     child: TextFormField(
@@ -281,6 +325,32 @@ class _AddBranchScreenState extends State<AddBranchScreen> {
                       keyboardType: TextInputType.emailAddress,
                       textCapitalization: TextCapitalization.sentences,
                     ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      openImagePicker(context);
+                    },
+                    child: Container(
+                        margin: const EdgeInsets.only(top: 12),
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                                backgroundColor:
+                                    theme.colorScheme.primary.withAlpha(28),
+                                child: const Icon(Icons.camera_alt_outlined)),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            const Text('Cover Image'),
+                            const Spacer(),
+                            Icon(
+                              Icons.check_circle,
+                              color: image == null
+                                  ? theme.colorScheme.primary.withAlpha(28)
+                                  : Colors.green,
+                            )
+                          ],
+                        )),
                   ),
                   Container(
                     margin: const EdgeInsets.only(top: 24),
@@ -401,6 +471,8 @@ class _AddBranchScreenState extends State<AddBranchScreen> {
                                     imageFile: image,
                                     phoneNumber: phoneNumber,
                                     address: branchAdress,
+                                    country: country,
+                                    region: region,
                                   );
 
                                   await Provider.of<BranchProvider>(context,

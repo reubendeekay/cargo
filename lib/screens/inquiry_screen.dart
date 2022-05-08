@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:cargo/constants.dart';
+import 'package:cargo/helpers/my_loader.dart';
 import 'package:cargo/helpers/url_helper.dart';
 import 'package:cargo/theme/app_theme.dart';
 import 'package:cargo/theme/custom_theme.dart';
@@ -7,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutx/flutx.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:http/http.dart' as http;
 
 class EnquiryScreen extends StatefulWidget {
   const EnquiryScreen({Key? key}) : super(key: key);
@@ -26,6 +30,7 @@ class _EnquiryScreenState extends State<EnquiryScreen> {
   String? message;
   String? inquiryOption;
   final formKey = GlobalKey<FormState>();
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -285,28 +290,46 @@ class _EnquiryScreenState extends State<EnquiryScreen> {
               height: 20,
             ),
             AppButton(
-              child: FxText.bodyMedium(
-                'Submit',
-                color: Colors.white,
-                fontWeight: 700,
-              ),
+              child: isLoading
+                  ? const MyLoader()
+                  : FxText.bodyMedium(
+                      'Submit',
+                      color: Colors.white,
+                      fontWeight: 700,
+                    ),
               color: kPrimaryColor,
               onTap: inquiryOption == null
                   ? () {}
                   : () async {
                       if (formKey.currentState!.validate()) {
-                        final Uri emailLaunchUri = Uri(
-                          scheme: 'mailto',
-                          path: 'mustafaibra643@gmail.com',
-                          query: encodeQueryParameters(<String, String>{
-                            'subject': 'iCargo $inquiryOption :$name',
-                            'body': '''
-      Hello my name is $name, phone number $phoneNumber.
-      
-      $message'''
-                          }),
-                        );
-                        await launch(emailLaunchUri.toString());
+                        setState(() {
+                          isLoading = true;
+                        });
+                        final statusCode = await sendEmail(name!, email!,
+                            message!, inquiryOption!, phoneNumber!);
+                        setState(() {
+                          isLoading = false;
+                        });
+
+                        if (statusCode == 200) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              backgroundColor: Colors.green,
+                              content: FxText.bodyMedium(
+                                'Your enquiry has been sent successfully',
+                                color: Colors.white,
+                              )));
+                          Future.delayed(const Duration(seconds: 5), () {
+                            Navigator.pop(context);
+                          });
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: Colors.red,
+                            content: FxText.bodyMedium(
+                              'Something went wrong, please try again later',
+                              color: Colors.white,
+                            ),
+                          ));
+                        }
                       }
                     },
             )
@@ -315,4 +338,31 @@ class _EnquiryScreenState extends State<EnquiryScreen> {
       ),
     );
   }
+}
+
+Future sendEmail(String name, String email, String message, String enquiry,
+    String phone) async {
+  final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+  const serviceId = 'service_1fxydje';
+  const templateId = 'template_bfsm85v';
+  const userId = 'JJi0NRWGRPp85VXCK';
+  final response = await http.post(url,
+      headers: {
+        'Content-Type': 'application/json'
+      }, //This line makes sure it works for all platforms.
+      body: json.encode({
+        'service_id': serviceId,
+        'template_id': templateId,
+        'user_id': userId,
+        'template_params': {
+          'name': name,
+          'inquiry_option': enquiry,
+          'message': message,
+          'phone': phone,
+          'email': email
+        }
+      }));
+  print(response.body);
+
+  return response.statusCode;
 }

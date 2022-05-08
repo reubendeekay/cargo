@@ -36,22 +36,22 @@ class _CargoDirectoryState extends State<CargoDirectory> {
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    const MyDateWidget(),
-                    const Spacer(),
-                    MySearchButton(
-                      onPressed: () {},
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.all(15.0),
+          //   child: Column(
+          //     children: [
+          // //       Row(
+          // //         children: [
+          // //           const MyDateWidget(),
+          // //           const Spacer(),
+          // //           MySearchButton(
+          // //             onPressed: () {},
+          // //           ),
+          // //         ],
+          // //       ),
+          // //     ],
+          // //   ),
+          // // ),
           FutureBuilder<List<CargoModel>>(
               future: Provider.of<CargoProvider>(context).fetchAllCargo(),
               builder: (context, snapshot) {
@@ -61,7 +61,7 @@ class _CargoDirectoryState extends State<CargoDirectory> {
                 return Expanded(
                   child: Container(
                       margin: const EdgeInsets.only(top: 15),
-                      width: size.width - 30,
+                      width: size.width,
                       child: MyTable(
                         cargos: snapshot.data!,
                       )),

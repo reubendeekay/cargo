@@ -9,7 +9,9 @@ import 'package:flutx/flutx.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class BranchContactsScreen extends StatefulWidget {
-  const BranchContactsScreen({Key? key}) : super(key: key);
+  const BranchContactsScreen({Key? key, required this.branches})
+      : super(key: key);
+  final List<BranchModel> branches;
 
   @override
   _BranchContactsScreenState createState() => _BranchContactsScreenState();
@@ -61,62 +63,32 @@ class _BranchContactsScreenState extends State<BranchContactsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          leading: InkWell(
-            onTap: () => Navigator.of(context).pop(),
-            child: const Icon(
-              Icons.arrow_back_ios,
-              size: 18,
-            ),
+    return Column(
+      children: <Widget>[
+        Expanded(
+          child: PageView(
+            pageSnapping: true,
+            physics: const ClampingScrollPhysics(),
+            controller: _pageController,
+            onPageChanged: (int page) {
+              setState(() {
+                _currentPage = page;
+              });
+            },
+            children: widget.branches
+                .map((e) => BranchContactWidget(branch: e))
+                .toList(),
           ),
-          title: FxText.titleMedium("Our Branches", fontWeight: 600),
         ),
-        body: StreamBuilder<QuerySnapshot>(
-            stream:
-                FirebaseFirestore.instance.collection('branches').snapshots(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return Container(
-                    padding: FxSpacing.fromLTRB(16, 0, 16, 8),
-                    height: double.infinity,
-                    width: double.infinity,
-                    child: Card(
-                      elevation: 2,
-                      color: Colors.grey[400],
-                      clipBehavior: Clip.hardEdge,
-                    ));
-              }
-              List<DocumentSnapshot> docs = snapshot.data!.docs;
-              return Column(
-                children: <Widget>[
-                  Expanded(
-                    child: PageView(
-                      pageSnapping: true,
-                      physics: const ClampingScrollPhysics(),
-                      controller: _pageController,
-                      onPageChanged: (int page) {
-                        setState(() {
-                          _currentPage = page;
-                        });
-                      },
-                      children: docs
-                          .map((e) => BranchContactWidget(
-                              branch: BranchModel.fromJson(e)))
-                          .toList(),
-                    ),
-                  ),
-                  Container(
-                    padding: FxSpacing.all(16),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: _buildPageIndicatorStatic(docs.length),
-                    ),
-                  ),
-                ],
-              );
-            }));
+        Container(
+          padding: FxSpacing.all(16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: _buildPageIndicatorStatic(widget.branches.length),
+          ),
+        ),
+      ],
+    );
   }
 }
 
@@ -131,7 +103,7 @@ class BranchContactWidget extends StatelessWidget {
       scheme: 'mailto',
       path: branch.email,
       query: encodeQueryParameters(
-          <String, String>{'subject': 'FastGate Support Request'}),
+          <String, String>{'subject': 'iCargo Support Request'}),
     );
     return Container(
       padding: FxSpacing.fromLTRB(16, 0, 16, 8),
@@ -143,8 +115,10 @@ class BranchContactWidget extends StatelessWidget {
           children: <Widget>[
             Expanded(
               child: Image(
-                  image: CachedNetworkImageProvider(branch.imageUrl!),
-                  fit: BoxFit.fill),
+                image: CachedNetworkImageProvider(branch.imageUrl!),
+                fit: BoxFit.cover,
+                width: double.infinity,
+              ),
             ),
             Container(
               padding: FxSpacing.fromLTRB(24, 24, 16, 16),

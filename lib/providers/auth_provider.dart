@@ -65,7 +65,7 @@ class AuthProvider with ChangeNotifier {
   Future<void> createAgent(UserModel agent) async {
     final createdUser = await FirebaseAuth.instance
         .createUserWithEmailAndPassword(
-            email: agent.email!, password: agent.password!);
+            email: agent.email!.trim(), password: agent.password!.trim());
 
     final upload = await FirebaseStorage.instance
         .ref('agents/${createdUser.user!.uid}')

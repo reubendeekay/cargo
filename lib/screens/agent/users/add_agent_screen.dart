@@ -7,6 +7,7 @@ import 'package:cargo/providers/auth_provider.dart';
 import 'package:cargo/providers/branch_provider.dart';
 import 'package:cargo/theme/app_theme.dart';
 import 'package:cargo/theme/custom_theme.dart';
+import 'package:cargo/widgets/my_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutx/flutx.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -284,51 +285,14 @@ class _AddAgentScreenState extends State<AddAgentScreen> {
                       textCapitalization: TextCapitalization.sentences,
                     ),
                   ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 12),
-                    child: TextFormField(
-                      onChanged: (val) {
-                        setState(() {
-                          role = val;
-                        });
-                      },
-                      style: FxTextStyle.titleSmall(
-                          letterSpacing: 0,
-                          color: theme.colorScheme.onBackground,
-                          fontWeight: 500),
-                      decoration: InputDecoration(
-                        hintText: "Role",
-                        hintStyle: FxTextStyle.titleSmall(
-                            letterSpacing: 0,
-                            color: theme.colorScheme.onBackground,
-                            fontWeight: 500),
-                        border: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(4),
-                            ),
-                            borderSide: BorderSide.none),
-                        enabledBorder: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(4),
-                            ),
-                            borderSide: BorderSide.none),
-                        focusedBorder: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(4),
-                            ),
-                            borderSide: BorderSide.none),
-                        filled: true,
-                        fillColor: customTheme.card,
-                        prefixIcon: const Icon(
-                          MdiIcons.security,
-                          size: 22,
-                        ),
-                        isDense: true,
-                        contentPadding: const EdgeInsets.all(0),
-                      ),
-                      keyboardType: TextInputType.emailAddress,
-                      textCapitalization: TextCapitalization.sentences,
-                    ),
+                  MyDropDown(
+                    selectedOption: (val) {
+                      setState(() {
+                        role = val;
+                      });
+                    },
+                    hintText: 'Role',
+                    options: roles,
                   ),
                   Container(
                     margin: const EdgeInsets.only(top: 12),
@@ -400,7 +364,7 @@ class _AddAgentScreenState extends State<AddAgentScreen> {
                                 fullName: fullName,
                                 password: password,
                                 branch: branc,
-                                email: role,
+                                email: email,
                                 imageFile: image!,
                                 phoneNumber: phoneNumber,
                                 role: role);
@@ -436,6 +400,12 @@ class _AddAgentScreenState extends State<AddAgentScreen> {
           ),
         ]));
   }
+
+  List<String> roles = [
+    "Admin",
+    "Agent",
+    "Manager",
+  ];
 
   Future<void> openImagePicker(
     BuildContext context,
