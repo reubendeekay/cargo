@@ -29,13 +29,14 @@ class _BranchesScreenState extends State<BranchesScreen> {
     final branches =
         Provider.of<BranchProvider>(context, listen: false).branches;
     return Scaffold(
+      appBar: AppBar(
+          elevation: 0.5,
+          title: FxText.bodyLarge("Branch Search",
+              fontWeight: 600, letterSpacing: 0)),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: Column(children: [
-            FxText.bodyLarge("Branch Search",
-                fontWeight: 600, letterSpacing: 0),
-            FxSpacing.height(20),
             MyDropDown(
               selectedOption: (val) {
                 setState(() {

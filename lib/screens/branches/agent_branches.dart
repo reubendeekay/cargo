@@ -58,7 +58,7 @@ class AgentBranchTile extends StatelessWidget {
       onTap: () {
         Get.to(() => EditBranchScreen(branch: branch));
       },
-      subtitle: Text('Manager: ' + branch.managerName!),
+      subtitle: Text('Manager: ${branch.managerName!}'),
       leading: CircleAvatar(
         backgroundColor: kPrimaryColor,
         backgroundImage: CachedNetworkImageProvider(branch.imageUrl!),

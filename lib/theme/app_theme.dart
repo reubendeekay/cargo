@@ -1,3 +1,4 @@
+import 'package:cargo/constants.dart';
 import 'package:cargo/theme/theme_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutx/flutx.dart';
@@ -18,7 +19,7 @@ class AppTheme {
 
   static ThemeData learningLightTheme = createTheme(
     ColorScheme.fromSeed(
-        seedColor: const Color(0xff6874E8),
+        seedColor: kPrimaryColor,
         secondary: const Color(0xff548c2f),
         onSecondary: const Color(0xffffffff),
         secondaryContainer: const Color(0xffdef0d1),
@@ -28,8 +29,8 @@ class AppTheme {
     ColorScheme.fromSeed(
         seedColor: const Color(0xffcfd2ff),
         primary: const Color(0xffcfd2ff),
-        onPrimary: const Color(0xff1529e8),
-        primaryContainer: const Color(0xff5563e8),
+        onPrimary: kPrimaryColor,
+        primaryContainer: kPrimaryColor,
         onPrimaryContainer: const Color(0xffe6e7fd),
         secondary: const Color(0xffd3ebc1),
         onSecondary: const Color(0xff253e14),
