@@ -15,7 +15,6 @@ class BranchesScreen extends StatefulWidget {
 class _BranchesScreenState extends State<BranchesScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Future.delayed(Duration.zero, () async {
       await Provider.of<BranchProvider>(context, listen: false).getBranches();
