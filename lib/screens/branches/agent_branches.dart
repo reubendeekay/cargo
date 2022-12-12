@@ -60,7 +60,7 @@ class AgentBranchTile extends StatelessWidget {
       },
       subtitle: Text('Manager: ' + branch.managerName!),
       leading: CircleAvatar(
-        backgroundColor: Colors.blue,
+        backgroundColor: kPrimaryColor,
         backgroundImage: CachedNetworkImageProvider(branch.imageUrl!),
       ),
       trailing: InkWell(

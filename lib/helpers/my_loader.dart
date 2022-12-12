@@ -1,3 +1,4 @@
+import 'package:cargo/constants.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
@@ -31,7 +32,7 @@ class ColorLoader4 extends StatefulWidget {
       {Key? key,
       this.dotOneColor = Colors.redAccent,
       this.dotTwoColor = Colors.green,
-      this.dotThreeColor = Colors.blueAccent,
+      this.dotThreeColor = kPrimaryColor,
       this.duration = const Duration(milliseconds: 1000),
       this.dotType = DotType.circle,
       this.dotSize = 6.0,

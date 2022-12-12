@@ -1,3 +1,4 @@
+import 'package:cargo/constants.dart';
 import 'package:cargo/helpers/my_loader.dart';
 import 'package:cargo/providers/auth_provider.dart';
 import 'package:cargo/screens/agent/dashboard/agent_dashboard.dart';
@@ -139,6 +140,9 @@ class _LogInScreenState extends State<LogInScreen>
                         FxButton.block(
                           elevation: 0,
                           borderRadiusAll: 4,
+                          style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 15),
+                              backgroundColor: kPrimaryColor),
                           onPressed: () async {
                             setState(() {
                               isLoading = true;
@@ -148,7 +152,7 @@ class _LogInScreenState extends State<LogInScreen>
                               await Provider.of<AuthProvider>(context,
                                       listen: false)
                                   .getUser(uid);
-                              Get.off(() => AgentDashboard());
+                              Get.off(() => const AgentDashboard());
                             } catch (e) {
                               setState(() {
                                 isLoading = false;

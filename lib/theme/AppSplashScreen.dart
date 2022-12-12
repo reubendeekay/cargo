@@ -28,7 +28,7 @@ class _AppSplashScreenState extends State<AppSplashScreen> {
 
   bool isVisible = false;
   void setOpacity() {
-    Future.delayed(const Duration(milliseconds: 300), () {
+    Future.delayed(const Duration(milliseconds: 100), () {
       setState(() {
         isVisible = true;
       });
@@ -37,31 +37,18 @@ class _AppSplashScreenState extends State<AppSplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return Stack(
       children: [
         AnimatedSplashScreen(
           backgroundColor: kPrimaryColor,
           splash: 'assets/images/logo.png',
+          splashIconSize: 150,
           duration: 3000,
           centered: true,
           nextScreen: const Homepage(),
           splashTransition: SplashTransition.rotationTransition,
           pageTransitionType: PageTransitionType.fade,
         ),
-        Positioned(
-            left: 0,
-            right: 0,
-            bottom: size.height * 0.35,
-            child: AnimatedOpacity(
-              opacity: isVisible ? 1 : 0,
-              duration: const Duration(milliseconds: 1000),
-              child: Center(
-                child: SizedBox(
-                    child: Image.asset('assets/images/splash.png'), height: 50),
-              ),
-            ),
-            top: 0),
       ],
     );
   }

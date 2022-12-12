@@ -16,6 +16,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({Key? key}) : super(key: key);
@@ -37,12 +38,14 @@ class _CustomDrawerState extends State<CustomDrawer> {
         width: _isCollapsed ? 300 : 70,
         margin: const EdgeInsets.only(bottom: 10, top: 10),
         decoration: const BoxDecoration(
-          borderRadius: BorderRadius.only(
-            bottomRight: Radius.circular(10),
-            topRight: Radius.circular(10),
-          ),
-          color: Color(0xFF130925),
-        ),
+            borderRadius: BorderRadius.only(
+              bottomRight: Radius.circular(10),
+              topRight: Radius.circular(10),
+            ),
+            gradient: LinearGradient(colors: [
+              Color(0xFF935098),
+              Color(0xFF93180C),
+            ], begin: Alignment.topLeft, end: Alignment.bottomRight)),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Column(
@@ -118,11 +121,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 title: 'About Us',
                 isSelected: index == 5,
                 infoCount: 1,
-                onTap: () {
+                onTap: () async {
                   setState(() {
                     index = 5;
                   });
-                  Get.to(() => const AboutScreen());
+                  await launchUrl(
+                      Uri.parse('https://fastgatecargo.com/?page_id=1563'));
                 },
               ),
               CustomListTile(

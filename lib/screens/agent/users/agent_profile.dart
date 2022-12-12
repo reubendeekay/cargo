@@ -15,7 +15,6 @@ import 'package:media_picker_widget/media_picker_widget.dart';
 import 'package:provider/provider.dart';
 
 class AgentProfile extends StatefulWidget {
-
   const AgentProfile({Key? key}) : super(key: key);
   @override
   _AgentProfileState createState() => _AgentProfileState();
@@ -50,9 +49,9 @@ class _AgentProfileState extends State<AgentProfile> {
             const Text(
               'Edit Profile',
               style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  ),
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(
               height: 10,
@@ -197,9 +196,12 @@ class _AgentProfileState extends State<AgentProfile> {
             Container(
               width: double.infinity,
               margin: const EdgeInsets.symmetric(horizontal: 15),
-              child: RaisedButton(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  backgroundColor: Theme.of(context).primaryColor,
                 ),
                 onPressed: () async {
                   final myUser = UserModel(
@@ -216,7 +218,6 @@ class _AgentProfileState extends State<AgentProfile> {
                     isLoading = false;
                   });
                 },
-                color: Theme.of(context).primaryColor,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                       horizontal: 60.0, vertical: 15),
@@ -297,7 +298,7 @@ class _UserPictureState extends State<UserPicture> {
                   color: Theme.of(context).cardColor,
                   shape: BoxShape.circle,
                 ),
-                child:  CircleAvatar(
+                child: CircleAvatar(
                   backgroundColor: Theme.of(context).primaryColor,
                   radius: 16,
                   child: const Icon(

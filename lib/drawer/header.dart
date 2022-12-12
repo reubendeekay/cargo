@@ -21,10 +21,13 @@ class CustomDrawerHeader extends StatelessWidget {
           SizedBox(height: 40, child: Image.asset('assets/images/logo.png')),
           if (isColapsed) const SizedBox(width: 5),
           if (isColapsed)
-            SizedBox(
-              height: 30,
-              child: Image.asset('assets/images/splash.png'),
-            ),
+            const Text(
+              'Fastgate Cargo',
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
+            )
         ],
       ),
     );

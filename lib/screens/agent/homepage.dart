@@ -10,22 +10,16 @@ import 'package:cargo/screens/agent/user_notifications.dart';
 import 'package:cargo/screens/branches/branches_screen.dart';
 import 'package:cargo/screens/faq_question_screen.dart';
 import 'package:cargo/models/notification_model.dart';
-import 'package:cargo/screens/auth/login_screen.dart';
-import 'package:cargo/screens/tracking/cargo_tracking_screen.dart';
-import 'package:cargo/providers/auth_provider.dart';
-import 'package:cargo/screens/agent/dashboard/agent_dashboard.dart';
-import 'package:cargo/screens/branches/branch_contacts.dart';
 import 'package:cargo/screens/tracking/verification_dialog.dart';
 import 'package:cargo/theme/app_theme.dart';
 import 'package:cargo/theme/custom_theme.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutx/flutx.dart';
 import 'package:get/route_manager.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:scroll_app_bar/scroll_app_bar.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({Key? key}) : super(key: key);
@@ -64,10 +58,8 @@ class _HomepageState extends State<Homepage> {
             onPressed: () {
               Get.to(() => const UserNotifications());
             },
-            icon: const Icon(
-              Icons.notifications_on_sharp,
-              color: Colors.red,
-            ),
+            icon:
+                const Icon(Icons.notifications_on_sharp, color: kPrimaryColor),
           ),
         ],
       ),
@@ -218,8 +210,9 @@ class _HomepageState extends State<Homepage> {
                   title: 'Freight',
                   description: 'Air/Sea freight',
                   image: 'call.png',
-                  onTap: () {
-                    Get.to(() => const ServicesScreen());
+                  onTap: () async {
+                    await launchUrl(Uri.parse(
+                        'https://fastgatecargo.com/?services=ocean-freight'));
                   },
                 ),
                 ServiceCard(
@@ -242,8 +235,9 @@ class _HomepageState extends State<Homepage> {
                   title: 'About',
                   description: 'About Us',
                   image: 'about.png',
-                  onTap: () {
-                    Get.to(() => const AboutScreen());
+                  onTap: () async {
+                    await launchUrl(
+                        Uri.parse('https://fastgatecargo.com/?page_id=1563'));
                   },
                 ),
               ],
