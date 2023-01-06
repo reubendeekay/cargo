@@ -10,7 +10,7 @@ class NotificationModel {
   NotificationModel(
       {this.id, this.message, this.createdAt, this.category, this.createdBy});
 
-  factory NotificationModel.fromJson(dynamic json) {
+  factory NotificationModel.fromJson(DocumentSnapshot json) {
     return NotificationModel(
       id: json.id,
       message: json['message'],

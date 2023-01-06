@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cargo/constants.dart';
 import 'package:cargo/providers/auth_provider.dart';
 import 'package:cargo/screens/agent/dashboard/widgets/dashboard_data.dart';
 import 'package:cargo/screens/agent/dashboard/widgets/dashboard_tile_model.dart';
@@ -49,7 +50,7 @@ class AgentDashboardState extends State<AgentDashboard> {
 
     final user = Provider.of<AuthProvider>(context, listen: false).user;
     return Scaffold(
-      backgroundColor: db4_colorPrimary,
+      backgroundColor: kPrimaryColor,
       key: _scaffoldKey,
       body: SafeArea(
         child: Stack(

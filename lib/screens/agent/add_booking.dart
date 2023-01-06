@@ -65,6 +65,7 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
       ),
       body: ListView(
         padding: FxSpacing.nTop(20),
+        physics: const BouncingScrollPhysics(),
         children: <Widget>[
           FxText.bodyLarge("Personal information",
               fontWeight: 600, letterSpacing: 0),
@@ -125,12 +126,21 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
                       phoneNumber = val;
                     });
                   },
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Please enter phone number";
+                    }
+                    if (value.length < 12) {
+                      return "Please enter a valid phone number";
+                    }
+                    return null;
+                  },
                   style: FxTextStyle.titleSmall(
                       letterSpacing: 0,
                       color: theme.colorScheme.onBackground,
                       fontWeight: 500),
                   decoration: InputDecoration(
-                    hintText: "Phone Number",
+                    hintText: "Phone Number (w country code)",
                     hintStyle: FxTextStyle.titleSmall(
                         letterSpacing: 0,
                         color: theme.colorScheme.onBackground,
@@ -216,7 +226,7 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.only(top: 16),
+                    margin: const EdgeInsets.only(top: 15),
                     child: TextFormField(
                       onChanged: (val) {
                         setState(() {
@@ -262,7 +272,7 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.only(top: 16),
+                    margin: const EdgeInsets.only(top: 15),
                     child: TextFormField(
                       onChanged: (val) {
                         setState(() {
@@ -425,7 +435,6 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
                   });
                 },
                 child: Container(
-                  margin: const EdgeInsets.only(top: 5),
                   height: 48,
                   decoration: BoxDecoration(
                       borderRadius: const BorderRadius.all(
@@ -458,81 +467,79 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
                 hintText: "Payment Method",
               ),
               Container(
-                margin: const EdgeInsets.only(top: 24),
-                child: Center(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(Radius.circular(4)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: theme.colorScheme.primary.withAlpha(28),
-                          blurRadius: 4,
-                          offset: const Offset(0, 1),
-                        ),
-                      ],
-                    ),
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        invoiceNumber = getOtp().toString();
+                margin: const EdgeInsets.only(top: 10),
+                height: 48,
+                width: double.infinity,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(4)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: theme.colorScheme.primary.withAlpha(28),
+                        blurRadius: 4,
+                        offset: const Offset(0, 1),
+                      ),
+                    ],
+                  ),
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      invoiceNumber = getOtp().toString();
 
-                        final cargo = CargoModel(
-                            createdAt: Timestamp.now(),
-                            customerName: customerName,
-                            currentLocation: origin,
-                            docNo: origin![0] +
-                                origin![1] +
-                                origin![2] +
-                                '/' +
-                                destinaton![0] +
-                                destinaton![1] +
-                                destinaton![2] +
-                                '/' +
-                                invoiceNumber!,
-                            weight: weight,
-                            userId: uid,
-                            destination: destinaton,
-                            phoneNumber: phoneNumber,
-                            invoiceNumber: invoiceNumber,
-                            origin: origin,
-                            paymentMode: paymentMode,
-                            deliveryDate: deliveryDate,
-                            packageName: packageName,
-                            shippingFee: shippingFee,
-                            received: CargoStatus(Timestamp.now(), origin));
-                        setState(() {
-                          isLoading = true;
-                        });
-                        try {
-                          await Provider.of<CargoProvider>(context,
-                                  listen: false)
-                              .addCargo(cargo);
-                        } catch (e) {
-                          setState(() {
-                            isLoading = false;
-                          });
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(e.toString()),
-                          ));
-                        }
+                      final cargo = CargoModel(
+                          createdAt: Timestamp.now(),
+                          customerName: customerName,
+                          currentLocation: origin,
+                          docNo: origin![0] +
+                              origin![1] +
+                              origin![2] +
+                              '/' +
+                              destinaton![0] +
+                              destinaton![1] +
+                              destinaton![2] +
+                              '/' +
+                              invoiceNumber!,
+                          weight: weight,
+                          userId: uid,
+                          destination: destinaton,
+                          phoneNumber: phoneNumber,
+                          invoiceNumber: invoiceNumber,
+                          origin: origin,
+                          paymentMode: paymentMode,
+                          deliveryDate: deliveryDate,
+                          packageName: packageName,
+                          shippingFee: shippingFee,
+                          received: CargoStatus(Timestamp.now(), origin));
+                      setState(() {
+                        isLoading = true;
+                      });
+                      try {
+                        await Provider.of<CargoProvider>(context, listen: false)
+                            .addCargo(cargo);
+                      } catch (e) {
                         setState(() {
                           isLoading = false;
                         });
-                        Navigator.of(context).pop();
-
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text('Shipping details added to database'),
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(e.toString()),
                         ));
-                      },
-                      child: isLoading
-                          ? const MyLoader()
-                          : FxText.bodyMedium("Add Shipment",
-                              fontWeight: 600,
-                              color: theme.colorScheme.onPrimary),
-                      style: ButtonStyle(
-                          padding:
-                              MaterialStateProperty.all(FxSpacing.xy(16, 0))),
-                    ),
+                      }
+                      setState(() {
+                        isLoading = false;
+                      });
+                      Navigator.of(context).pop();
+
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('Shipping details added to database'),
+                      ));
+                    },
+                    child: isLoading
+                        ? const MyLoader()
+                        : FxText.bodyMedium("Add Shipment",
+                            fontWeight: 600,
+                            color: theme.colorScheme.onPrimary),
+                    style: ButtonStyle(
+                        padding:
+                            MaterialStateProperty.all(FxSpacing.xy(16, 0))),
                   ),
                 ),
               ),

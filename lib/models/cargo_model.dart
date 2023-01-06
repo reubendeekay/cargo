@@ -46,8 +46,8 @@ class CargoModel {
     this.weight,
   });
 
-  factory CargoModel.fromJson(dynamic json) => CargoModel(
-        docNo: json["id"],
+  factory CargoModel.fromJson(DocumentSnapshot json) => CargoModel(
+        docNo: json.id,
         createdAt: json["createdAt"],
         origin: json["origin"],
         destination: json["destination"],

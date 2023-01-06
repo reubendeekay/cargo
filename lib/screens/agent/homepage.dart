@@ -41,6 +41,7 @@ class _HomepageState extends State<Homepage> {
 
   final formKey = GlobalKey<FormState>();
   final controller = ScrollController();
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -89,10 +90,10 @@ class _HomepageState extends State<Homepage> {
                       child: SizedBox(
                         height: size.height * 0.35,
                         child: Transform.scale(
-                            scale: 1.24,
+                            scale: 1,
                             child: Opacity(
                                 opacity: 0.3,
-                                child: Lottie.asset('assets/track.json'))),
+                                child: Lottie.asset('assets/global.json'))),
                       ),
                     ),
                     Padding(
@@ -115,76 +116,97 @@ class _HomepageState extends State<Homepage> {
                           const SizedBox(
                             height: 15,
                           ),
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: TextFormField(
-                              onChanged: (val) {
-                                setState(() {
-                                  trackingNumber = val;
-                                });
-                              },
-                              validator: (val) {
-                                if (val!.isEmpty) {
-                                  return 'Please enter tracking number';
-                                }
-                                return null;
-                              },
-                              textInputAction: TextInputAction.search,
-                              onFieldSubmitted: (val) async {
-                                if (formKey.currentState!.validate()) {
-                                  try {
-                                    await Provider.of<CargoProvider>(context,
-                                            listen: false)
-                                        .getShipment(val);
-                                    showDialog(
-                                        context: context,
-                                        builder: (ctx) =>
-                                            const VerificationDialog());
-                                  } catch (e) {
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(const SnackBar(
-                                      content: Text("Something went wrong"),
-                                    ));
-                                  }
-                                }
-                              },
-                              decoration: InputDecoration(
-                                  fillColor: Colors.white,
-                                  filled: true,
-                                  hintText: 'Enter tracking number',
-                                  hintStyle: const TextStyle(
-                                    fontSize: 13,
-                                    color: Colors.black,
+                          Row(
+                            children: [
+                              Expanded(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: TextFormField(
+                                    onChanged: (val) {
+                                      setState(() {
+                                        trackingNumber = val;
+                                      });
+                                    },
+                                    validator: (val) {
+                                      if (val!.isEmpty) {
+                                        return 'Please enter tracking number';
+                                      }
+                                      return null;
+                                    },
+                                    textInputAction: TextInputAction.done,
+                                    decoration: InputDecoration(
+                                      fillColor: Colors.white,
+                                      filled: true,
+                                      hintText: 'Enter tracking number',
+                                      hintStyle: const TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.black,
+                                      ),
+                                      border: InputBorder.none,
+                                      prefixIcon: Icon(
+                                        Icons.assistant_navigation,
+                                        color: Colors.red.withOpacity(0.6),
+                                      ),
+                                    ),
                                   ),
-                                  border: InputBorder.none,
-                                  prefixIcon: Icon(
-                                    Icons.track_changes_rounded,
-                                    color: Colors.red.withOpacity(0.8),
-                                  ),
-                                  suffixIcon: InkWell(
-                                      onTap: () async {
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 15,
+                              ),
+                              InkWell(
+                                onTap: isLoading
+                                    ? null
+                                    : () async {
                                         if (formKey.currentState!.validate()) {
+                                          setState(() {
+                                            isLoading = true;
+                                          });
                                           try {
                                             await Provider.of<CargoProvider>(
                                                     context,
                                                     listen: false)
                                                 .getShipment(trackingNumber!);
+                                            setState(() {
+                                              isLoading = false;
+                                            });
                                             showDialog(
                                                 context: context,
                                                 builder: (ctx) =>
                                                     const VerificationDialog());
                                           } catch (e) {
+                                            print(e);
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(const SnackBar(
                                               content:
                                                   Text("Something went wrong"),
                                             ));
+                                            setState(() {
+                                              isLoading = false;
+                                            });
                                           }
                                         }
                                       },
-                                      child: const Icon(Icons.search,
-                                          color: kPrimaryColor))),
-                            ),
+                                child: Container(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(5)),
+                                  child: isLoading
+                                      ? const SizedBox(
+                                          height: 22,
+                                          width: 22,
+                                          child: CircularProgressIndicator(
+                                            color: kPrimaryColor,
+                                          ),
+                                        )
+                                      : const Icon(
+                                          Icons.search,
+                                          color: kPrimaryColor,
+                                        ),
+                                ),
+                              )
+                            ],
                           )
                         ],
                       ),
@@ -290,7 +312,7 @@ class LocationWidget extends StatelessWidget {
               const SizedBox(
                 width: 5,
               ),
-              FxText.titleMedium(location!.city! + ', ' + location.country!,
+              FxText.titleMedium('${location!.city!}, ${location.country!}',
                   color: Colors.black, fontWeight: 600),
             ],
           );
@@ -371,11 +393,11 @@ class _NewsWidgetState extends State<NewsWidget> {
               isActive: _currentStep == widget.nots.indexOf(not),
               title: FxText.bodyLarge(not.category!, fontWeight: 600),
               subtitle:
-                  FxText.bodySmall('By ' + not.createdBy!, fontWeight: 500),
+                  FxText.bodySmall('By ${not.createdBy!}', fontWeight: 500),
               state: StepState.indexed,
               content: SizedBox(
                 width: MediaQuery.of(context).size.width,
-                child: FxText.bodySmall(" - " + not.message!,
+                child: FxText.bodySmall(" - ${not.message!}",
                     color: theme.colorScheme.onBackground),
               ),
             ),

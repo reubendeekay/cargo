@@ -25,18 +25,20 @@ class CargoProvider with ChangeNotifier {
         .set(cargo.toJson());
 
     await twilioFlutter!.sendSMS(
-        toNumber: '+' + cargo.phoneNumber!,
+        toNumber: '+${cargo.phoneNumber!}',
         messageBody:
-            'Dear customer, your shipment has been added. Monitor and track it using the tracking number ${cargo.docNo!}.');
+            'Dear ${cargo.customerName!}, your shipment has been received at our warehouse ${cargo.origin!} with ${cargo.packageName!}. Monitor and track it using the tracking numberr ${cargo.docNo!}.');
 
     notifyListeners();
   }
 
   Future<CargoModel> fetchUserCargo(String docNo) async {
+    print('started');
     final cargoSnapshot = await FirebaseFirestore.instance
         .collection('cargos')
         .doc(docNo.replaceAll('/', '_'))
         .get();
+    print(cargoSnapshot.data());
 
     notifyListeners();
     return _cargo = CargoModel.fromJson(cargoSnapshot);
@@ -49,15 +51,16 @@ class CargoProvider with ChangeNotifier {
         .doc(trackingNo.replaceAll('/', '_'))
         .get();
     sms = getOtp().toString();
-    final cargo = CargoModel.fromJson(results.data()!);
+    final cargo = CargoModel.fromJson(results);
 
-    if(twilioFlutter == null) {
+    if (twilioFlutter == null) {
       await initialiseTwillio();
     }
+    final phone = cargo.phoneNumber!.replaceAll(' ', '').replaceAll('+', '');
     await twilioFlutter!.sendSMS(
-        toNumber: '+' + cargo.phoneNumber!,
+        toNumber: '+$phone',
         messageBody:
-            'Dear customer, your verificication code for shipment ${cargo.docNo} is $sms . iCargo');
+            'Dear ${cargo.customerName!}, your verificication code for shipment ${cargo.docNo} is $sms . Fastgate Cargo Services');
 
 //SAVING SEARCHED CARGO TO LOCAL STORAGE
     Word word = Word();
@@ -65,7 +68,6 @@ class CargoProvider with ChangeNotifier {
     word.frequency = 1;
     DatabaseHelper helper = DatabaseHelper.instance;
     int id = await helper.insert(word);
-    print('inserted row: $id');
 
     _cargo = cargo;
     phoneNumber = cargo.phoneNumber!;
@@ -100,13 +102,13 @@ class CargoProvider with ChangeNotifier {
         .collection('cargos')
         .doc(doc)
         .update(cargo.toJson());
-         if(twilioFlutter == null) {
+    if (twilioFlutter == null) {
       await initialiseTwillio();
     }
     await twilioFlutter!.sendSMS(
-        toNumber: '+' + cargo.phoneNumber!,
+        toNumber: '+${cargo.phoneNumber!}',
         messageBody:
-            'Dear customer, your package with tracking ${cargo.docNo!.split('_').join('/')} is $status at $location. Thank you for choosing us. iCargo');
+            'Dear customer, your package with tracking ${cargo.docNo!.split('_').join('/')} is $status at $location. Thank you for choosing Fastgate Cargo Services');
 
     notifyListeners();
   }

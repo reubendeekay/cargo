@@ -61,6 +61,7 @@ class AgentsManagement extends StatelessWidget {
             }
 
             return ListView(
+              physics: const BouncingScrollPhysics(),
               children: List.generate(docs.length,
                   (index) => AgentCard(user: UserModel.fromJson(docs[index]))),
             );

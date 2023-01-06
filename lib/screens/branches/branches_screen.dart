@@ -63,13 +63,7 @@ class _BranchesScreenState extends State<BranchesScreen> {
               Row(
                 children: [
                   FxText.bodyLarge(
-                      branches
-                              .where((element) =>
-                                  element.region == region &&
-                                  element.country == country)
-                              .length
-                              .toString() +
-                          " results",
+                      "${branches.where((element) => element.region == region && element.country == country).length} results",
                       fontWeight: 600,
                       letterSpacing: 0),
                 ],

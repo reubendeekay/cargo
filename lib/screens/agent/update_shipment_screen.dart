@@ -65,48 +65,69 @@ class _UpdateShipmentScreenState extends State<UpdateShipmentScreen> {
               fontWeight: 600, letterSpacing: 0),
           Container(
             margin: const EdgeInsets.only(top: 16),
-            child: TextField(
-              controller: trackingNumber!,
-              onEditingComplete: () {
-                setState(() {});
-              },
-              textInputAction: TextInputAction.search,
-              style: FxTextStyle.titleSmall(
-                  letterSpacing: 0,
-                  color: theme.colorScheme.onBackground,
-                  fontWeight: 500),
-              decoration: InputDecoration(
-                hintText: "Tracking Number",
-                hintStyle: FxTextStyle.titleSmall(
-                    letterSpacing: 0,
-                    color: theme.colorScheme.onBackground,
-                    fontWeight: 500),
-                border: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(4),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: trackingNumber!,
+                    style: FxTextStyle.titleSmall(
+                        letterSpacing: 0,
+                        color: theme.colorScheme.onBackground,
+                        fontWeight: 500),
+                    decoration: InputDecoration(
+                      hintText: "Tracking Number",
+                      hintStyle: FxTextStyle.titleSmall(
+                          letterSpacing: 0,
+                          color: theme.colorScheme.onBackground,
+                          fontWeight: 500),
+                      border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(4),
+                          ),
+                          borderSide: BorderSide.none),
+                      enabledBorder: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(4),
+                          ),
+                          borderSide: BorderSide.none),
+                      focusedBorder: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(4),
+                          ),
+                          borderSide: BorderSide.none),
+                      filled: true,
+                      fillColor: customTheme.card,
+                      prefixIcon: const Icon(
+                        MdiIcons.briefcaseOutline,
+                        size: 22,
+                      ),
+                      isDense: true,
+                      contentPadding: const EdgeInsets.all(0),
                     ),
-                    borderSide: BorderSide.none),
-                enabledBorder: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(4),
-                    ),
-                    borderSide: BorderSide.none),
-                focusedBorder: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(4),
-                    ),
-                    borderSide: BorderSide.none),
-                filled: true,
-                fillColor: customTheme.card,
-                prefixIcon: const Icon(
-                  MdiIcons.briefcaseOutline,
-                  size: 22,
+                    keyboardType: TextInputType.emailAddress,
+                    textCapitalization: TextCapitalization.sentences,
+                  ),
                 ),
-                isDense: true,
-                contentPadding: const EdgeInsets.all(0),
-              ),
-              keyboardType: TextInputType.emailAddress,
-              textCapitalization: TextCapitalization.sentences,
+                const SizedBox(
+                  width: 15,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {});
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(11),
+                    decoration: BoxDecoration(
+                      color: customTheme.card,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: const Icon(
+                      Icons.search,
+                      color: kPrimaryColor,
+                    ),
+                  ),
+                )
+              ],
             ),
           ),
           if (trackingNumber != null && trackingNumber!.text.length > 13)
@@ -115,10 +136,18 @@ class _UpdateShipmentScreenState extends State<UpdateShipmentScreen> {
                     .fetchUserCargo(trackingNumber!.text.trim()),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: MyLoader(
-                        color: kPrimaryColor,
-                      ),
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        SizedBox(
+                          height: 100,
+                        ),
+                        Center(
+                          child: MyLoader(
+                            color: kPrimaryColor,
+                          ),
+                        ),
+                      ],
                     );
                   }
 
@@ -136,7 +165,15 @@ class _UpdateShipmentScreenState extends State<UpdateShipmentScreen> {
                           ),
                           const Spacer(),
                           FxText.bodyMedium(
-                            '${snapshot.data!.deliveryDate!.toDate().difference(DateTime.now()).inDays} days left',
+                            snapshot.data!.deliveryDate == null
+                                ? 'No delivery date set'
+                                : snapshot.data!.deliveryDate!
+                                            .toDate()
+                                            .difference(DateTime.now())
+                                            .inDays <
+                                        1
+                                    ? 'Delivered'
+                                    : '${snapshot.data!.deliveryDate!.toDate().difference(DateTime.now()).inDays} days left',
                             color: Colors.green,
                           ),
                         ],
@@ -164,7 +201,7 @@ class _UpdateShipmentScreenState extends State<UpdateShipmentScreen> {
                                 '${snapshot.data!.docNo!}'),
                             const SizedBox(height: 20),
                             trackingWidget(snapshot.data!.destination!,
-                                'Package: ' + snapshot.data!.packageName!),
+                                'Package: ${snapshot.data!.packageName!}'),
                             const SizedBox(height: 20),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
@@ -175,7 +212,7 @@ class _UpdateShipmentScreenState extends State<UpdateShipmentScreen> {
                                 ),
                                 const SizedBox(width: 5),
                                 FxText.bodyMedium(
-                                  'KES ' + snapshot.data!.shippingFee!,
+                                  'KES ${snapshot.data!.shippingFee!}',
                                   color: Colors.green,
                                   fontWeight: 700,
                                 ),
@@ -240,12 +277,9 @@ class _UpdateShipmentScreenState extends State<UpdateShipmentScreen> {
                       const SizedBox(
                         height: 20,
                       ),
-                      Center(
+                      SizedBox(
+                        width: double.infinity,
                         child: AppButton(
-                          child: FxText.bodyMedium(
-                            'Update',
-                            color: Colors.white,
-                          ),
                           color: kPrimaryColor,
                           onTap: () async {
                             if (status.text.isEmpty || location.text.isEmpty) {
@@ -292,6 +326,10 @@ class _UpdateShipmentScreenState extends State<UpdateShipmentScreen> {
                               isLoading = false;
                             });
                           },
+                          child: FxText.bodyMedium(
+                            'Update',
+                            color: Colors.white,
+                          ),
                         ),
                       )
                     ],

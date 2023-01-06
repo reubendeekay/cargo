@@ -26,7 +26,7 @@ class UserModel {
       this.imageFile,
       this.profilePic});
 
-  factory UserModel.fromJson(dynamic json) {
+  factory UserModel.fromJson(DocumentSnapshot json) {
     return UserModel(
       userId: json.id,
       fullName: json['fullName'],

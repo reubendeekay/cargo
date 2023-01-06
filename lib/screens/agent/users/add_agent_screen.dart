@@ -201,12 +201,21 @@ class _AddAgentScreenState extends State<AddAgentScreen> {
                           phoneNumber = val;
                         });
                       },
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please enter phone number';
+                        }
+                        if (value.length < 12) {
+                          return 'Please enter valid phone number';
+                        }
+                        return null;
+                      },
                       style: FxTextStyle.titleSmall(
                           letterSpacing: 0,
                           color: theme.colorScheme.onBackground,
                           fontWeight: 500),
                       decoration: InputDecoration(
-                        hintText: "Phone Number",
+                        hintText: "Phone Number(Including country code)",
                         hintStyle: FxTextStyle.titleSmall(
                             letterSpacing: 0,
                             color: theme.colorScheme.onBackground,

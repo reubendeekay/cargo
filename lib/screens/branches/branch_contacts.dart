@@ -99,20 +99,16 @@ class BranchContactWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
-    final Uri emailLaunchUri = Uri(
-      scheme: 'mailto',
-      path: branch.email,
-      query: encodeQueryParameters(
-          <String, String>{'subject': 'iCargo Support Request'}),
-    );
+
     return Container(
       padding: FxSpacing.fromLTRB(16, 0, 16, 8),
       child: Card(
         elevation: 2,
         clipBehavior: Clip.hardEdge,
+        margin: FxSpacing.all(0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
+          children: [
             Expanded(
               child: Image(
                 image: CachedNetworkImageProvider(branch.imageUrl!),
@@ -132,7 +128,7 @@ class BranchContactWidget extends StatelessWidget {
                   FxSpacing.height(16),
                   FxText.bodyLarge(branch.address!, fontWeight: 500),
                   FxText.titleSmall(branch.email!, fontWeight: 500),
-                  FxText.titleSmall('Manager: ' + branch.managerName!,
+                  FxText.titleSmall('Manager: ${branch.managerName!}',
                       fontWeight: 500),
                   FxSpacing.height(24),
                   Center(
@@ -140,9 +136,14 @@ class BranchContactWidget extends StatelessWidget {
                         elevation: 0,
                         borderRadiusAll: 4,
                         onPressed: () async {
-                          await launch(emailLaunchUri.toString());
+                          final phone = branch.phoneNumber!
+                              .replaceAll(' ', '')
+                              .replaceAll('+', '');
+
+                          await launchUrl(Uri.parse(
+                              'whatsapp://send?phone="+$phone+"&text=hello;'));
                         },
-                        child: FxText.bodyMedium(("Contact " + branch.name!),
+                        child: FxText.bodyMedium(("Contact ${branch.name!}"),
                             color: themeData.colorScheme.onSecondary,
                             letterSpacing: 0.2)),
                   ),
@@ -151,7 +152,6 @@ class BranchContactWidget extends StatelessWidget {
             )
           ],
         ),
-        margin: FxSpacing.all(0),
       ),
     );
   }

@@ -36,9 +36,17 @@ class ShipmentDetails extends StatelessWidget {
                 'Tracking Info'.toUpperCase(),
                 fontWeight: 700,
               ),
-              Spacer(),
+              const Spacer(),
               FxText.bodyMedium(
-                '${cargo.deliveryDate!.toDate().difference(DateTime.now()).inDays} days left',
+                cargo.deliveryDate == null
+                    ? 'Not yet delivered'
+                    : cargo.deliveryDate!
+                                .toDate()
+                                .difference(DateTime.now())
+                                .inDays <
+                            1
+                        ? 'Delivered'
+                        : '${cargo.deliveryDate!.toDate().difference(DateTime.now()).inDays} days left',
                 color: Colors.green,
               ),
             ],

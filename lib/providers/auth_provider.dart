@@ -8,7 +8,15 @@ final uid = FirebaseAuth.instance.currentUser!.uid;
 
 class AuthProvider with ChangeNotifier {
   bool isOnline = false;
-  UserModel? _user;
+  UserModel? _user = UserModel(
+      fullName: 'User',
+      email: 'email',
+      branch: 'branch',
+      role: 'agent',
+      phoneNumber: 'phone',
+      userId: 'userId',
+      profilePic:
+          'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png');
   UserModel? get user => _user;
 
   Future<void> signIn(String email, String password) async {

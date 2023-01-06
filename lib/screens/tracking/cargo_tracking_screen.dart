@@ -26,6 +26,8 @@ class _CargoTrackingScreenState extends State<CargoTrackingScreen> {
   late CustomTheme customTheme;
   late ThemeData theme;
   String? trackingNumber;
+  TextEditingController? _controller;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -79,6 +81,7 @@ class _CargoTrackingScreenState extends State<CargoTrackingScreen> {
               Container(
                 padding: const EdgeInsets.only(top: 24, left: 16, right: 16),
                 child: TextFormField(
+                  controller: _controller,
                   onChanged: (val) {
                     setState(() {
                       trackingNumber = val;

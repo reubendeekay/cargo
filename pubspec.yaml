@@ -60,6 +60,7 @@ dependencies:
   media_picker_widget: ^0.0.7
   native_pdf_view: ^6.0.0+1
   nb_utils: ^4.4.17
+
   page_transition: ^2.0.5
   path_provider: ^2.0.9
   provider: ^5.0.0
