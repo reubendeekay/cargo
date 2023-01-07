@@ -315,12 +315,12 @@ class _UpdateShipmentScreenState extends State<UpdateShipmentScreen> {
                                     listen: false)
                                 .updateTransit(cargo, status.text.toLowerCase(),
                                     location.text);
-                            Navigator.of(context).pop();
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text('Updated'),
                               ),
                             );
+                            Navigator.of(context).pop();
 
                             setState(() {
                               isLoading = false;
