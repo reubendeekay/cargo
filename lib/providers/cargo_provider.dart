@@ -60,7 +60,7 @@ class CargoProvider with ChangeNotifier {
     await twilioFlutter!.sendSMS(
         toNumber: '+$phone',
         messageBody:
-            'Dear ${cargo.customerName!}, your verificication code for shipment ${cargo.docNo} is $sms . Fastgate Cargo Services');
+            'Dear ${cargo.customerName!}, your verificication code for shipment ${cargo.docNo!.replaceAll('_', '/')} is $sms . Fastgate Cargo Services');
 
 //SAVING SEARCHED CARGO TO LOCAL STORAGE
     Word word = Word();
@@ -105,8 +105,10 @@ class CargoProvider with ChangeNotifier {
     if (twilioFlutter == null) {
       await initialiseTwillio();
     }
+    final phone = cargo.phoneNumber!.replaceAll(' ', '').replaceAll('+', '');
+
     await twilioFlutter!.sendSMS(
-        toNumber: '+${cargo.phoneNumber!}',
+        toNumber: '+$phone',
         messageBody:
             'Dear customer, your package with tracking ${cargo.docNo!.split('_').join('/')} is $status at $location. Thank you for choosing Fastgate Cargo Services');
 

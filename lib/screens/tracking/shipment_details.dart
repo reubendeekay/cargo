@@ -73,7 +73,7 @@ class ShipmentDetails extends StatelessWidget {
                     '${cargo.docNo!}'),
                 const SizedBox(height: 20),
                 trackingWidget(cargo.destination!,
-                    'Package: ' + cargo.packageName! + ' - ' + cargo.weight!),
+                    'Package: ${cargo.packageName!} - ${cargo.weight!.replaceAll('Kg', '')} Kg'),
                 const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -84,7 +84,7 @@ class ShipmentDetails extends StatelessWidget {
                     ),
                     const SizedBox(width: 5),
                     FxText.bodyMedium(
-                      'KES ' + cargo.shippingFee!,
+                      'KES ${cargo.shippingFee!}',
                       color: Colors.green,
                       fontWeight: 700,
                     ),

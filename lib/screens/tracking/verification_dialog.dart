@@ -65,7 +65,7 @@ class _VerificationDialogState extends State<VerificationDialog> {
             const SizedBox(
               height: 16,
             ),
-            text('We are sending a verification code to ' + cargo.phoneNumber!,
+            text('We are sending a verification code to ${cargo.phoneNumber!}',
                 fontSize: 14, textColor: Colors.blueGrey, isCentered: true),
             const SizedBox(
               height: 10,
@@ -130,7 +130,7 @@ class _VerificationDialogState extends State<VerificationDialog> {
                 InkWell(
                     onTap: () async {
                       await cargo.twilioFlutter!.sendSMS(
-                          toNumber: '+' + cargo.phoneNumber!,
+                          toNumber: '+${cargo.phoneNumber!}',
                           messageBody:
                               'Dear customer, your verificication code for shipment ${cargo.cargo.docNo} is ${cargo.sms} . Fastgate cargo Services');
                     },
@@ -143,7 +143,9 @@ class _VerificationDialogState extends State<VerificationDialog> {
             const SizedBox(
               height: 10,
             ),
-            text('Message sent to ${cargo.phoneNumber}', fontSize: 14),
+            text(
+                'Message sent to ${'${cargo.phoneNumber!.substring(0, 4)}* * * * * *${cargo.phoneNumber!.substring(10, cargo.phoneNumber!.length - 1)}'}',
+                fontSize: 14),
           ],
         ),
       ),

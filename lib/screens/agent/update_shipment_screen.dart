@@ -198,7 +198,7 @@ class _UpdateShipmentScreenState extends State<UpdateShipmentScreen> {
                             trackingWidget(
                                 snapshot.data!.origin!,
                                 'Tracking No: '
-                                '${snapshot.data!.docNo!}'),
+                                '${snapshot.data!.docNo!.replaceAll('_', '/')}'),
                             const SizedBox(height: 20),
                             trackingWidget(snapshot.data!.destination!,
                                 'Package: ${snapshot.data!.packageName!}'),
