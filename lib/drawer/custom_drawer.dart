@@ -1,15 +1,12 @@
-import 'package:cargo/constants.dart';
 import 'package:cargo/drawer/bottom_user_info.dart';
 import 'package:cargo/drawer/custom_list_tile.dart';
 import 'package:cargo/drawer/header.dart';
 import 'package:cargo/providers/auth_provider.dart';
-import 'package:cargo/screens/about_screen.dart';
 import 'package:cargo/screens/agent/agent_dashboard.dart';
 import 'package:cargo/screens/agent/search_history.dart';
+import 'package:cargo/screens/all_shipments.dart';
 import 'package:cargo/screens/auth/login_screen.dart';
-import 'package:cargo/screens/branches/branch_contacts.dart';
 import 'package:cargo/screens/branches/branches_screen.dart';
-import 'package:cargo/screens/faq_question_screen.dart';
 import 'package:cargo/screens/inquiry_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -74,12 +71,26 @@ class _CustomDrawerState extends State<CustomDrawer> {
               ),
               CustomListTile(
                 isCollapsed: _isCollapsed,
-                icon: Icons.location_on_outlined,
-                title: 'Branches',
+                icon: Icons.track_changes_outlined,
+                title: 'Your shipments',
                 isSelected: index == 2,
                 onTap: () {
                   setState(() {
                     index = 2;
+                  });
+                  Get.to(() => const AllShipments());
+                },
+                infoCount: 0,
+                doHaveMoreOptions: Icons.arrow_forward_ios,
+              ),
+              CustomListTile(
+                isCollapsed: _isCollapsed,
+                icon: Icons.location_on_outlined,
+                title: 'Branches',
+                isSelected: index == 3,
+                onTap: () {
+                  setState(() {
+                    index = 3;
                   });
                   Get.to(() => const BranchesScreen());
                 },
@@ -90,10 +101,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 isCollapsed: _isCollapsed,
                 icon: CupertinoIcons.text_bubble,
                 title: 'Enquiries',
-                isSelected: index == 3,
+                isSelected: index == 4,
                 onTap: () {
                   setState(() {
-                    index = 3;
+                    index = 4;
                   });
                   Get.to(() => const EnquiryScreen());
                 },
@@ -103,10 +114,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 isCollapsed: _isCollapsed,
                 icon: Icons.cloud_outlined,
                 title: 'Search history',
-                isSelected: index == 4,
+                isSelected: index == 5,
                 onTap: () {
                   setState(() {
-                    index = 4;
+                    index = 5;
                   });
                   Get.to(() => const SearchHistory());
                 },
@@ -119,11 +130,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 isCollapsed: _isCollapsed,
                 icon: Icons.notifications,
                 title: 'About Us',
-                isSelected: index == 5,
+                isSelected: index == 6,
                 infoCount: 1,
                 onTap: () async {
                   setState(() {
-                    index = 5;
+                    index = 6;
                   });
                   await launchUrl(
                       Uri.parse('https://fastgatecargo.com/?page_id=1563'));
@@ -133,11 +144,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   isCollapsed: _isCollapsed,
                   icon: Icons.security,
                   title: 'Agent',
-                  isSelected: index == 6,
+                  isSelected: index == 7,
                   infoCount: 0,
                   onTap: () async {
                     setState(() {
-                      index = 6;
+                      index = 7;
                     });
                     if (FirebaseAuth.instance.currentUser != null) {
                       final userData =

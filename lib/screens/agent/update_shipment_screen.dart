@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cargo/constants.dart';
 import 'package:cargo/helpers/my_loader.dart';
 import 'package:cargo/models/cargo_model.dart';
@@ -33,13 +35,16 @@ class _UpdateShipmentScreenState extends State<UpdateShipmentScreen> {
   TextEditingController status = TextEditingController();
   TextEditingController location = TextEditingController();
   final options = [
-    "Shipping process",
-    "In Shipment",
-    "On Delivery",
-    "Ready for Delivery",
-    "Delivered",
+    "Shipment received at",
+    "Shipment loaded on",
+    "Shipment on its way to",
+    "Arrived at ",
+    "Delivered at",
   ];
 
+  String? weight;
+  String? paymentMode;
+  String? shippingMode;
   bool isLoading = false;
   @override
   Widget build(BuildContext context) {
@@ -164,7 +169,7 @@ class _UpdateShipmentScreenState extends State<UpdateShipmentScreen> {
                             fontWeight: 700,
                           ),
                           const Spacer(),
-                          FxText.bodyMedium(
+                          FxText.bodySmall(
                             snapshot.data!.deliveryDate == null
                                 ? 'No delivery date set'
                                 : snapshot.data!.deliveryDate!
@@ -201,23 +206,7 @@ class _UpdateShipmentScreenState extends State<UpdateShipmentScreen> {
                                 '${snapshot.data!.docNo!.replaceAll('_', '/')}'),
                             const SizedBox(height: 20),
                             trackingWidget(snapshot.data!.destination!,
-                                'Package: ${snapshot.data!.packageName!}'),
-                            const SizedBox(height: 20),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                FxText.bodySmall(
-                                  'Shipping fee: ',
-                                  color: Colors.grey,
-                                ),
-                                const SizedBox(width: 5),
-                                FxText.bodyMedium(
-                                  'KES ${snapshot.data!.shippingFee!}',
-                                  color: Colors.green,
-                                  fontWeight: 700,
-                                ),
-                              ],
-                            )
+                                'Description: ${snapshot.data!.packageName!}'),
                           ]),
                         ),
                       ),
@@ -233,6 +222,49 @@ class _UpdateShipmentScreenState extends State<UpdateShipmentScreen> {
                           hintText:
                               status.text.isNotEmpty ? status.text : 'Status',
                           options: options),
+                      if (status.text == 'Arrived at')
+                        Container(
+                          margin: const EdgeInsets.only(top: 12),
+                          child: TextFormField(
+                            controller: location,
+                            keyboardType: TextInputType.number,
+                            style: FxTextStyle.titleSmall(
+                                letterSpacing: 0,
+                                color: theme.colorScheme.onBackground,
+                                fontWeight: 500),
+                            decoration: InputDecoration(
+                              hintText: "Weight",
+                              hintStyle: FxTextStyle.titleSmall(
+                                  letterSpacing: 0,
+                                  color: theme.colorScheme.onBackground,
+                                  fontWeight: 500),
+                              border: const OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(4),
+                                  ),
+                                  borderSide: BorderSide.none),
+                              enabledBorder: const OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(4),
+                                  ),
+                                  borderSide: BorderSide.none),
+                              focusedBorder: const OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(4),
+                                  ),
+                                  borderSide: BorderSide.none),
+                              filled: true,
+                              fillColor: customTheme.card,
+                              prefixIcon: const Icon(
+                                MdiIcons.web,
+                                size: 22,
+                              ),
+                              isDense: true,
+                              contentPadding: const EdgeInsets.all(0),
+                            ),
+                            textCapitalization: TextCapitalization.sentences,
+                          ),
+                        ),
                       Container(
                         margin: const EdgeInsets.only(top: 12),
                         child: TextFormField(
@@ -320,11 +352,11 @@ class _UpdateShipmentScreenState extends State<UpdateShipmentScreen> {
                                 content: Text('Updated'),
                               ),
                             );
-                            Navigator.of(context).pop();
 
                             setState(() {
                               isLoading = false;
                             });
+                            Navigator.of(context).pop();
                           },
                           child: FxText.bodyMedium(
                             'Update',

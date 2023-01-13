@@ -26,7 +26,7 @@ class _BranchesScreenState extends State<BranchesScreen> {
   @override
   Widget build(BuildContext context) {
     final branches =
-        Provider.of<BranchProvider>(context, listen: false).branches;
+        Provider.of<BranchProvider>(context, listen: true).branches;
     return Scaffold(
       appBar: AppBar(
           elevation: 0.5,
@@ -34,7 +34,7 @@ class _BranchesScreenState extends State<BranchesScreen> {
               fontWeight: 600, letterSpacing: 0)),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(15.0),
+          padding: const EdgeInsets.fromLTRB(15.0, 5, 15, 15),
           child: Column(children: [
             MyDropDown(
               selectedOption: (val) {
@@ -42,7 +42,8 @@ class _BranchesScreenState extends State<BranchesScreen> {
                   country = val;
                 });
               },
-              options: branches.map((e) => e.country.toString()).toList(),
+              options:
+                  branches.map((e) => e.country.toString()).toSet().toList(),
               hintText: 'Select Country',
             ),
             if (country != null)
@@ -60,9 +61,13 @@ class _BranchesScreenState extends State<BranchesScreen> {
                 hintText: 'Select Region',
               ),
             if (region != null && country != null)
+              const SizedBox(
+                height: 10,
+              ),
+            if (region != null && country != null)
               Row(
                 children: [
-                  FxText.bodyLarge(
+                  FxText.bodyMedium(
                       "${branches.where((element) => element.region == region && element.country == country).length} results",
                       fontWeight: 600,
                       letterSpacing: 0),

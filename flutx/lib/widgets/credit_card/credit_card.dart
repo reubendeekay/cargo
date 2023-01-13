@@ -6,6 +6,8 @@
 
 /// [FxCreditCard] - customisable credit card with all the necessary details in it.
 
+// ignore_for_file: deprecated_member_use_from_same_package
+
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -94,44 +96,40 @@ class _FxCreditCardState extends State<FxCreditCard>
 
     cardNumberTextEditingController!.addListener(() {
       setState(() {
-        if (cardNumberTextEditingController!.text.isNotEmpty){
+        if (cardNumberTextEditingController!.text.isNotEmpty) {
           creditCardNumber = cardNumberTextEditingController!.text;
           widget.onCreditCardNumberChanged(creditCardNumber);
-        }
-        else
+        } else
           creditCardNumber = "4040 4040 4040 4040";
       });
     });
 
     cardDateTextEditingController!.addListener(() {
       setState(() {
-        if (cardDateTextEditingController!.text.isNotEmpty){
+        if (cardDateTextEditingController!.text.isNotEmpty) {
           creditCardDate = cardDateTextEditingController!.text;
           widget.onCreditCardDateChanged(creditCardDate);
-        }
-        else
+        } else
           creditCardDate = "MM/YY";
       });
     });
 
     cardNameTextEditingController!.addListener(() {
       setState(() {
-        if (cardNameTextEditingController!.text.isNotEmpty){
+        if (cardNameTextEditingController!.text.isNotEmpty) {
           creditCardName = cardNameTextEditingController!.text;
           widget.onCreditCardNameChanged(creditCardName);
-        }
-        else
+        } else
           creditCardName = "Holder Name";
       });
     });
 
     cardCVVTextEditingController!.addListener(() {
       setState(() {
-        if (cardCVVTextEditingController!.text.isNotEmpty){
+        if (cardCVVTextEditingController!.text.isNotEmpty) {
           creditCardCVV = cardCVVTextEditingController!.text;
           widget.onCreditCardCVVChanged(creditCardCVV);
-        }
-        else
+        } else
           creditCardCVV = "739";
       });
     });

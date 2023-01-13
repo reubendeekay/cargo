@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
+
 import 'package:cargo/helpers/my_loader.dart';
 import 'package:cargo/models/cargo_model.dart';
 import 'package:cargo/providers/auth_provider.dart';
@@ -25,14 +27,14 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
   String? invoiceNumber;
   String? packageName;
   String? shippingFee;
-  String? weight;
+  // String? weight;
 
   String? origin;
 
   String? destinaton;
   String? phoneNumber;
 
-  String? paymentMode;
+  // String? paymentMode;
   String? freight;
 
   String? customerName;
@@ -193,7 +195,7 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
                           color: theme.colorScheme.onBackground,
                           fontWeight: 500),
                       decoration: InputDecoration(
-                        hintText: "Package Name",
+                        hintText: "Description",
                         hintStyle: FxTextStyle.titleSmall(
                             letterSpacing: 0,
                             color: theme.colorScheme.onBackground,
@@ -225,98 +227,98 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
                       textCapitalization: TextCapitalization.sentences,
                     ),
                   ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 15),
-                    child: TextFormField(
-                      onChanged: (val) {
-                        setState(() {
-                          weight = val;
-                        });
-                      },
-                      style: FxTextStyle.titleSmall(
-                          letterSpacing: 0,
-                          color: theme.colorScheme.onBackground,
-                          fontWeight: 500),
-                      decoration: InputDecoration(
-                        hintText: "Weight in Kg",
-                        hintStyle: FxTextStyle.titleSmall(
-                            letterSpacing: 0,
-                            color: theme.colorScheme.onBackground,
-                            fontWeight: 500),
-                        border: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(4),
-                            ),
-                            borderSide: BorderSide.none),
-                        enabledBorder: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(4),
-                            ),
-                            borderSide: BorderSide.none),
-                        focusedBorder: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(4),
-                            ),
-                            borderSide: BorderSide.none),
-                        filled: true,
-                        fillColor: customTheme.card,
-                        prefixIcon: const Icon(
-                          MdiIcons.weightKilogram,
-                          size: 22,
-                        ),
-                        isDense: true,
-                        contentPadding: const EdgeInsets.all(0),
-                      ),
-                      keyboardType: TextInputType.number,
-                      textCapitalization: TextCapitalization.sentences,
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 15),
-                    child: TextFormField(
-                      onChanged: (val) {
-                        setState(() {
-                          shippingFee = val;
-                        });
-                      },
-                      keyboardType: TextInputType.number,
-                      style: FxTextStyle.titleSmall(
-                          letterSpacing: 0,
-                          color: theme.colorScheme.onBackground,
-                          fontWeight: 500),
-                      decoration: InputDecoration(
-                        hintText: "Shipping fee",
-                        hintStyle: FxTextStyle.titleSmall(
-                            letterSpacing: 0,
-                            color: theme.colorScheme.onBackground,
-                            fontWeight: 500),
-                        border: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(4),
-                            ),
-                            borderSide: BorderSide.none),
-                        enabledBorder: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(4),
-                            ),
-                            borderSide: BorderSide.none),
-                        focusedBorder: const OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(4),
-                            ),
-                            borderSide: BorderSide.none),
-                        filled: true,
-                        fillColor: customTheme.card,
-                        prefixIcon: const Icon(
-                          MdiIcons.cash,
-                          size: 22,
-                        ),
-                        isDense: true,
-                        contentPadding: const EdgeInsets.all(0),
-                      ),
-                      textCapitalization: TextCapitalization.sentences,
-                    ),
-                  ),
+                  // Container(
+                  //   margin: const EdgeInsets.only(top: 15),
+                  //   child: TextFormField(
+                  //     onChanged: (val) {
+                  //       setState(() {
+                  //         weight = val;
+                  //       });
+                  //     },
+                  //     style: FxTextStyle.titleSmall(
+                  //         letterSpacing: 0,
+                  //         color: theme.colorScheme.onBackground,
+                  //         fontWeight: 500),
+                  //     decoration: InputDecoration(
+                  //       hintText: "Weight in Kg",
+                  //       hintStyle: FxTextStyle.titleSmall(
+                  //           letterSpacing: 0,
+                  //           color: theme.colorScheme.onBackground,
+                  //           fontWeight: 500),
+                  //       border: const OutlineInputBorder(
+                  //           borderRadius: BorderRadius.all(
+                  //             Radius.circular(4),
+                  //           ),
+                  //           borderSide: BorderSide.none),
+                  //       enabledBorder: const OutlineInputBorder(
+                  //           borderRadius: BorderRadius.all(
+                  //             Radius.circular(4),
+                  //           ),
+                  //           borderSide: BorderSide.none),
+                  //       focusedBorder: const OutlineInputBorder(
+                  //           borderRadius: BorderRadius.all(
+                  //             Radius.circular(4),
+                  //           ),
+                  //           borderSide: BorderSide.none),
+                  //       filled: true,
+                  //       fillColor: customTheme.card,
+                  //       prefixIcon: const Icon(
+                  //         MdiIcons.weightKilogram,
+                  //         size: 22,
+                  //       ),
+                  //       isDense: true,
+                  //       contentPadding: const EdgeInsets.all(0),
+                  //     ),
+                  //     keyboardType: TextInputType.number,
+                  //     textCapitalization: TextCapitalization.sentences,
+                  //   ),
+                  // ),
+                  // Container(
+                  //   margin: const EdgeInsets.only(top: 15),
+                  //   child: TextFormField(
+                  //     onChanged: (val) {
+                  //       setState(() {
+                  //         shippingFee = val;
+                  //       });
+                  //     },
+                  //     keyboardType: TextInputType.number,
+                  //     style: FxTextStyle.titleSmall(
+                  //         letterSpacing: 0,
+                  //         color: theme.colorScheme.onBackground,
+                  //         fontWeight: 500),
+                  //     decoration: InputDecoration(
+                  //       hintText: "Shipping fee",
+                  //       hintStyle: FxTextStyle.titleSmall(
+                  //           letterSpacing: 0,
+                  //           color: theme.colorScheme.onBackground,
+                  //           fontWeight: 500),
+                  //       border: const OutlineInputBorder(
+                  //           borderRadius: BorderRadius.all(
+                  //             Radius.circular(4),
+                  //           ),
+                  //           borderSide: BorderSide.none),
+                  //       enabledBorder: const OutlineInputBorder(
+                  //           borderRadius: BorderRadius.all(
+                  //             Radius.circular(4),
+                  //           ),
+                  //           borderSide: BorderSide.none),
+                  //       focusedBorder: const OutlineInputBorder(
+                  //           borderRadius: BorderRadius.all(
+                  //             Radius.circular(4),
+                  //           ),
+                  //           borderSide: BorderSide.none),
+                  //       filled: true,
+                  //       fillColor: customTheme.card,
+                  //       prefixIcon: const Icon(
+                  //         MdiIcons.cash,
+                  //         size: 22,
+                  //       ),
+                  //       isDense: true,
+                  //       contentPadding: const EdgeInsets.all(0),
+                  //     ),
+                  //     textCapitalization: TextCapitalization.sentences,
+                  //   ),
+                  // ),
                   Container(
                     margin: const EdgeInsets.only(top: 12),
                     child: TextFormField(
@@ -457,15 +459,15 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
                   ),
                 ),
               ),
-              MyDropDown(
-                selectedOption: (val) {
-                  setState(() {
-                    paymentMode = val;
-                  });
-                },
-                options: paymentMethod,
-                hintText: "Payment Method",
-              ),
+              // MyDropDown(
+              //   selectedOption: (val) {
+              //     setState(() {
+              //       paymentMode = val;
+              //     });
+              //   },
+              //   options: paymentMethod,
+              //   hintText: "Payment Method",
+              // ),
               Container(
                 margin: const EdgeInsets.only(top: 10),
                 height: 48,
@@ -489,25 +491,18 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
                           createdAt: Timestamp.now(),
                           customerName: customerName,
                           currentLocation: origin,
-                          docNo: origin![0] +
-                              origin![1] +
-                              origin![2] +
-                              '/' +
-                              destinaton![0] +
-                              destinaton![1] +
-                              destinaton![2] +
-                              '/' +
-                              invoiceNumber!,
-                          weight: weight,
+                          docNo:
+                              '${origin![0]}${origin![1]}${origin![2]}/${destinaton![0]}${destinaton![1]}${destinaton![2]}/${invoiceNumber!}',
+                          weight: null,
                           userId: uid,
                           destination: destinaton,
                           phoneNumber: phoneNumber,
                           invoiceNumber: invoiceNumber,
                           origin: origin,
-                          paymentMode: paymentMode,
+                          paymentMode: null,
                           deliveryDate: deliveryDate,
                           packageName: packageName,
-                          shippingFee: shippingFee,
+                          shippingFee: null,
                           received: CargoStatus(Timestamp.now(), origin));
                       setState(() {
                         isLoading = true;
@@ -532,14 +527,14 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
                         content: Text('Shipping details added to database'),
                       ));
                     },
+                    style: ButtonStyle(
+                        padding:
+                            MaterialStateProperty.all(FxSpacing.xy(16, 0))),
                     child: isLoading
                         ? const MyLoader()
                         : FxText.bodyMedium("Add Shipment",
                             fontWeight: 600,
                             color: theme.colorScheme.onPrimary),
-                    style: ButtonStyle(
-                        padding:
-                            MaterialStateProperty.all(FxSpacing.xy(16, 0))),
                   ),
                 ),
               ),

@@ -4,7 +4,6 @@
 
 /// [FxCardNumberInputFormatter] - formats the given string as per the credit card number format.
 
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class FxCardNumberInputFormatter extends TextInputFormatter {

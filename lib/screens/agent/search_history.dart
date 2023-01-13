@@ -14,7 +14,7 @@ class SearchHistory extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
+        elevation: 0.5,
         leading: InkWell(
           onTap: () => Navigator.of(context).pop(),
           child: const Icon(
@@ -55,28 +55,54 @@ class SearchHistory extends StatelessWidget {
   }
 }
 
-class SearchHistoryWidget extends StatelessWidget {
+class SearchHistoryWidget extends StatefulWidget {
   const SearchHistoryWidget({Key? key, required this.word}) : super(key: key);
   final Word word;
 
   @override
+  State<SearchHistoryWidget> createState() => _SearchHistoryWidgetState();
+}
+
+class _SearchHistoryWidgetState extends State<SearchHistoryWidget> {
+  bool isLoading = false;
+  @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: const Icon(Icons.search),
-      title: FxText.titleMedium(word.word!),
-      trailing: const Icon(Icons.north_west),
-      onTap: () async {
-        try {
-          await Provider.of<CargoProvider>(context, listen: false)
-              .getShipment(word.word!);
-          showDialog(
-              context: context, builder: (ctx) => const VerificationDialog());
-        } catch (e) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text("Something went wrong"),
-          ));
-        }
-      },
+    return Column(
+      children: [
+        ListTile(
+          title: FxText.titleSmall(widget.word.word!),
+          dense: true,
+          leading: const Icon(Icons.history),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 15),
+          trailing: isLoading
+              ? const SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: CircularProgressIndicator(color: kPrimaryColor),
+                )
+              : const Icon(Icons.search),
+          onTap: () async {
+            try {
+              setState(() {
+                isLoading = true;
+              });
+              await Provider.of<CargoProvider>(context, listen: false)
+                  .getShipment(widget.word.word!);
+              setState(() {
+                isLoading = false;
+              });
+              showDialog(
+                  context: context,
+                  builder: (ctx) => const VerificationDialog());
+            } catch (e) {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text("Something went wrong"),
+              ));
+            }
+          },
+        ),
+        const Divider()
+      ],
     );
   }
 }

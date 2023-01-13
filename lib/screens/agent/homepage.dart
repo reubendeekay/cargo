@@ -1,11 +1,11 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:cargo/constants.dart';
 import 'package:cargo/drawer/custom_drawer.dart';
 import 'package:cargo/providers/branch_provider.dart';
 import 'package:cargo/providers/cargo_provider.dart';
 import 'package:cargo/providers/location_provider.dart';
-import 'package:cargo/screens/about_screen.dart';
 import 'package:cargo/screens/agent/service_card.dart';
-import 'package:cargo/screens/agent/services_screen.dart';
 import 'package:cargo/screens/agent/user_notifications.dart';
 import 'package:cargo/screens/branches/branches_screen.dart';
 import 'package:cargo/screens/faq_question_screen.dart';
@@ -16,9 +16,9 @@ import 'package:cargo/theme/custom_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutx/flutx.dart';
 import 'package:get/route_manager.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
-import 'package:scroll_app_bar/scroll_app_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Homepage extends StatefulWidget {
@@ -48,33 +48,46 @@ class _HomepageState extends State<Homepage> {
     final size = MediaQuery.of(context).size;
     Provider.of<CargoProvider>(context, listen: false).initialiseTwillio();
     return Scaffold(
-      appBar: ScrollAppBar(
-        controller: controller,
+      appBar: AppBar(
+        backgroundColor: kPrimaryColor,
+        leadingWidth: 70,
+        leading: Builder(
+          builder: (context) => Container(
+            margin: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.white, width: 2),
+              shape: BoxShape.circle,
+            ),
+            child: IconButton(
+              icon: const Icon(Icons.menu, color: Colors.white),
+              onPressed: () => Scaffold.of(context).openDrawer(),
+            ),
+          ),
+        ),
         elevation: 0,
         centerTitle: true,
-        title: FxText.titleSmall('Current location',
-            color: Colors.grey, fontWeight: 600),
+        title: FxText.titleMedium('Fastgate Cargo'.toUpperCase(),
+            color: Colors.white, fontWeight: 700),
         actions: [
           IconButton(
             onPressed: () {
               Get.to(() => const UserNotifications());
             },
-            icon:
-                const Icon(Icons.notifications_on_sharp, color: kPrimaryColor),
+            icon: const Icon(Icons.notifications_on_sharp, color: Colors.white),
           ),
         ],
       ),
       drawer: const CustomDrawer(),
       body: Container(
         color: theme.backgroundColor,
-        child: ListView(
-          controller: controller,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const LocationWidget(),
             Container(
-              margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
+              margin: const EdgeInsets.only(bottom: 20),
+              decoration: const BoxDecoration(
+                borderRadius:
+                    BorderRadius.vertical(bottom: Radius.circular(40)),
                 color: kPrimaryColor,
               ),
               height: size.height * 0.5,
@@ -92,21 +105,24 @@ class _HomepageState extends State<Homepage> {
                         child: Transform.scale(
                             scale: 1,
                             child: Opacity(
-                                opacity: 0.3,
-                                child: Lottie.asset('assets/global.json'))),
+                                opacity: 0.5,
+                                child: Lottie.asset('assets/spin.json'))),
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(30.0),
+                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
                       child: Column(
                         children: [
+                          const SizedBox(
+                            height: 30,
+                          ),
                           FxText.titleLarge(
                             'Track your shipment',
                             fontWeight: 700,
                             color: Colors.white,
                           ),
                           const SizedBox(
-                            height: 15,
+                            height: 10,
                           ),
                           FxText.titleSmall(
                             'Please enter your tracking number',
@@ -114,13 +130,13 @@ class _HomepageState extends State<Homepage> {
                             fontSize: 12,
                           ),
                           const SizedBox(
-                            height: 15,
+                            height: 30,
                           ),
                           Row(
                             children: [
                               Expanded(
                                 child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderRadius: BorderRadius.circular(50),
                                   child: TextFormField(
                                     onChanged: (val) {
                                       setState(() {
@@ -133,6 +149,7 @@ class _HomepageState extends State<Homepage> {
                                       }
                                       return null;
                                     },
+                                    style: GoogleFonts.ibmPlexSans(),
                                     textInputAction: TextInputAction.done,
                                     decoration: InputDecoration(
                                       fillColor: Colors.white,
@@ -175,7 +192,6 @@ class _HomepageState extends State<Homepage> {
                                                 builder: (ctx) =>
                                                     const VerificationDialog());
                                           } catch (e) {
-                                            print(e);
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(const SnackBar(
                                               content:
@@ -189,9 +205,9 @@ class _HomepageState extends State<Homepage> {
                                       },
                                 child: Container(
                                   padding: const EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                       color: Colors.white,
-                                      borderRadius: BorderRadius.circular(5)),
+                                      shape: BoxShape.circle),
                                   child: isLoading
                                       ? const SizedBox(
                                           height: 22,
@@ -216,53 +232,70 @@ class _HomepageState extends State<Homepage> {
               ),
             ),
             Container(
-                margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
-                child: FxText.bodyMedium("SERVICES",
-                    fontWeight: 600, letterSpacing: 0.3)),
-            GridView.count(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisCount: 2,
-              padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-              mainAxisSpacing: 20,
-              childAspectRatio: 1,
-              crossAxisSpacing: 20,
-              children: <Widget>[
-                ServiceCard(
-                  title: 'Freight',
-                  description: 'Air/Sea freight',
-                  image: 'call.png',
-                  onTap: () async {
-                    await launchUrl(Uri.parse(
-                        'https://fastgatecargo.com/?services=ocean-freight'));
-                  },
-                ),
-                ServiceCard(
-                  image: 'truck.png',
-                  onTap: () async {
-                    await Provider.of<BranchProvider>(context, listen: false)
-                        .getBranches();
-                    Get.to(() => const BranchesScreen());
-                  },
-                ),
-                ServiceCard(
-                  title: 'FAQ',
-                  description: 'Frequent questions',
-                  image: 'faq.png',
-                  onTap: () {
-                    Get.to(() => const FAQQuestionScreen());
-                  },
-                ),
-                ServiceCard(
-                  title: 'About',
-                  description: 'About Us',
-                  image: 'about.png',
-                  onTap: () async {
-                    await launchUrl(
-                        Uri.parse('https://fastgatecargo.com/?page_id=1563'));
-                  },
-                ),
-              ],
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: FxText.bodyLarge(
+                  "SERVICES",
+                  fontWeight: 800,
+                  letterSpacing: 0.3,
+                  fontSize: 18,
+                )),
+            Expanded(
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                physics: const BouncingScrollPhysics(),
+                children: [
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  ServiceCard(
+                    title: 'Freight',
+                    description: 'Air/Sea freight',
+                    image: 'call.png',
+                    onTap: () async {
+                      await launchUrl(Uri.parse(
+                          'https://fastgatecargo.com/?services=ocean-freight'));
+                    },
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  ServiceCard(
+                    image: 'truck.png',
+                    onTap: () async {
+                      await Provider.of<BranchProvider>(context, listen: false)
+                          .getBranches();
+                      Get.to(() => const BranchesScreen());
+                    },
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  ServiceCard(
+                    title: 'FAQ',
+                    description: 'Frequent questions',
+                    image: 'faq.png',
+                    onTap: () {
+                      Get.to(() => const FAQQuestionScreen());
+                    },
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  ServiceCard(
+                    title: 'About',
+                    description: 'About Us',
+                    image: 'about.png',
+                    onTap: () async {
+                      await launchUrl(
+                          Uri.parse('https://fastgatecargo.com/?page_id=1563'));
+                    },
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                ],
+              ),
             ),
             const SizedBox(
               height: 30,
@@ -287,15 +320,16 @@ class LocationWidget extends StatelessWidget {
             return Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(
+                Icon(
                   Icons.my_location_sharp,
                   size: 14,
+                  color: Colors.grey[300],
                 ),
                 const SizedBox(
                   width: 5,
                 ),
-                FxText.titleMedium('Nairobi, KE',
-                    color: Colors.black, fontWeight: 600),
+                FxText.bodySmall('Nairobi, KE',
+                    color: Colors.grey[300], fontWeight: 600),
               ],
             );
           }
@@ -305,15 +339,16 @@ class LocationWidget extends StatelessWidget {
           return Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
+              Icon(
                 Icons.my_location_sharp,
                 size: 14,
+                color: Colors.grey[300],
               ),
               const SizedBox(
                 width: 5,
               ),
-              FxText.titleMedium('${location!.city!}, ${location.country!}',
-                  color: Colors.black, fontWeight: 600),
+              FxText.bodySmall('${location!.city!}, ${location.country!}',
+                  color: Colors.grey[300], fontWeight: 600),
             ],
           );
         });

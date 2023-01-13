@@ -1,14 +1,20 @@
-import 'package:cargo/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutx/flutx.dart';
 
 class MyDropDown extends StatefulWidget {
   const MyDropDown(
-      {Key? key, this.hintText, required this.selectedOption, this.options})
+      {Key? key,
+      this.hintText,
+      this.maxHeight,
+      this.minHeight,
+      required this.selectedOption,
+      this.options})
       : super(key: key);
   final String? hintText;
   final List<String>? options;
   final Function(String option) selectedOption;
+  final double? maxHeight;
+  final double? minHeight;
 
   @override
   State<MyDropDown> createState() => _MyDropDownState();
@@ -26,7 +32,7 @@ class _MyDropDownState extends State<MyDropDown> {
             backgroundColor: Colors.transparent,
             context: context,
             builder: (ctx) {
-              widget.options!.sort();
+              // widget.options!.sort();
               return DropDownOptions(
                 options: widget.options,
                 hintText: widget.hintText,
@@ -40,7 +46,7 @@ class _MyDropDownState extends State<MyDropDown> {
             });
       },
       child: Container(
-          margin: const EdgeInsets.symmetric(vertical: 10),
+          margin: const EdgeInsets.symmetric(vertical: 5),
           height: 48,
           padding: const EdgeInsets.only(left: 15, right: 10),
           decoration: BoxDecoration(
@@ -69,11 +75,18 @@ class _MyDropDownState extends State<MyDropDown> {
 
 class DropDownOptions extends StatelessWidget {
   const DropDownOptions(
-      {Key? key, this.options, this.hintText, this.selectedOption})
+      {Key? key,
+      this.options,
+      this.maxHeight,
+      this.minHeight,
+      this.hintText,
+      this.selectedOption})
       : super(key: key);
   final List<String>? options;
   final String? hintText;
   final Function(String option)? selectedOption;
+  final double? maxHeight;
+  final double? minHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -83,8 +96,8 @@ class DropDownOptions extends StatelessWidget {
         child: GestureDetector(
             onTap: () {},
             child: DraggableScrollableSheet(
-                initialChildSize: 0.3,
-                maxChildSize: 0.5,
+                initialChildSize: minHeight ?? 0.3,
+                maxChildSize: maxHeight ?? 0.5,
                 minChildSize: 0.1,
                 builder: (ctx, controller) => AnimatedContainer(
                     duration: const Duration(milliseconds: 500),
@@ -134,13 +147,20 @@ class DropDownOptions extends StatelessWidget {
                                     selectedOption!(options![index]);
                                     Navigator.of(context).pop();
                                   },
-                                  child: Container(
-                                    color: Colors.white,
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 15, vertical: 18),
-                                    margin:
-                                        const EdgeInsets.symmetric(vertical: 1),
-                                    child: Text(options![index]),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        color: Colors.white,
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 15, vertical: 10),
+                                        margin: const EdgeInsets.symmetric(
+                                            vertical: 1),
+                                        child: Text(options![index]),
+                                      ),
+                                      const Divider()
+                                    ],
                                   ),
                                 ),
                               ),

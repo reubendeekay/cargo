@@ -9,7 +9,8 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
 class VerificationDialog extends StatefulWidget {
-  const VerificationDialog({Key? key}) : super(key: key);
+  const VerificationDialog({Key? key, this.onVerify}) : super(key: key);
+  final Function(bool isUser)? onVerify;
 
   @override
   State<VerificationDialog> createState() => _VerificationDialogState();
@@ -75,6 +76,13 @@ class _VerificationDialogState extends State<VerificationDialog> {
                 setState(() {
                   sms = val;
                 });
+                if (widget.onVerify != null) {
+                  if (cargo.otp == sms) {
+                    widget.onVerify!(true);
+                    Navigator.of(context).pop();
+                  }
+                  return;
+                }
 
                 if (cargo.sms == sms) {
                   Navigator.of(context).pop();
@@ -103,11 +111,12 @@ class _VerificationDialogState extends State<VerificationDialog> {
             ),
             AppButton(
               height: 45,
+              width: double.infinity,
               color: kPrimaryColor,
               onTap: () {
                 if (cargo.sms == sms) {
                   Navigator.of(context).pop();
-                  Get.off(() => ShipmentDetails(cargo: cargo.cargo));
+                  Get.to(() => ShipmentDetails(cargo: cargo.cargo));
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     content: Text('Wrong OTP'),
@@ -144,7 +153,7 @@ class _VerificationDialogState extends State<VerificationDialog> {
               height: 10,
             ),
             text(
-                'Message sent to ${'${cargo.phoneNumber!.substring(0, 4)}* * * * * *${cargo.phoneNumber!.substring(10, cargo.phoneNumber!.length - 1)}'}',
+                'Message sent to ${'${cargo.phoneNumber!.substring(0, 4)}* * * * * *${cargo.phoneNumber!.substring(9, cargo.phoneNumber!.length - 1)}'}',
                 fontSize: 14),
           ],
         ),

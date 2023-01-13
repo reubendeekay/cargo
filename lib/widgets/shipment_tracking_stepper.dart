@@ -14,10 +14,10 @@ class ShipmentTrackingStepper extends StatelessWidget {
       children: [
         detail(),
         detail(
-            title: 'Transit Depot\n' + cargo.currentLocation!,
+            title: 'Transit Depot\n${cargo.currentLocation!}',
             icon: FontAwesomeIcons.planeDeparture),
         detail(
-          title: 'Destination Depot\n' + cargo.destination!,
+          title: 'Destination Depot\n${cargo.destination!}',
           icon: FontAwesomeIcons.planeArrival,
         ),
         detail(
@@ -46,7 +46,7 @@ class ShipmentTrackingStepper extends StatelessWidget {
         SizedBox(
           width: 120,
           child: Text(
-            title ?? 'Consignment Booked\n' + cargo.origin!,
+            title ?? 'Consignment Booked\n${cargo.origin!}',
             textAlign: TextAlign.center,
             style: const TextStyle(fontSize: 12),
           ),

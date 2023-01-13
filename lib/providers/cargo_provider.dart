@@ -13,6 +13,7 @@ class CargoProvider with ChangeNotifier {
   String? sms;
   String? phoneNumber;
   TwilioFlutter? twilioFlutter;
+  String otp = math.Random().nextInt(999999).toString();
 
   Future<void> addCargo(CargoModel cargo) async {
     _cargo = cargo;
@@ -33,15 +34,27 @@ class CargoProvider with ChangeNotifier {
   }
 
   Future<CargoModel> fetchUserCargo(String docNo) async {
-    print('started');
     final cargoSnapshot = await FirebaseFirestore.instance
         .collection('cargos')
         .doc(docNo.replaceAll('/', '_'))
         .get();
-    print(cargoSnapshot.data());
 
     notifyListeners();
     return _cargo = CargoModel.fromJson(cargoSnapshot);
+  }
+
+  Future<void> sendOtp(String pN) async {
+    if (twilioFlutter == null) {
+      await initialiseTwillio();
+    }
+    otp = getOtp().toString();
+    phoneNumber = pN;
+
+    final phone = pN.replaceAll(' ', '').replaceAll('+', '');
+    await twilioFlutter!.sendSMS(
+        toNumber: '+$phone',
+        messageBody:
+            'Dear customer, your verificication code for viewing all your shipment is $otp . Fastgate Cargo Services');
   }
 
   Future<void> getShipment(String trackingNo) async {
@@ -110,7 +123,7 @@ class CargoProvider with ChangeNotifier {
     await twilioFlutter!.sendSMS(
         toNumber: '+$phone',
         messageBody:
-            'Dear customer, your package with tracking ${cargo.docNo!.split('_').join('/')} is $status at $location. Thank you for choosing Fastgate Cargo Services');
+            'Dear customer, your package with tracking ${cargo.docNo!.split('_').join('/')} status is $status $location. Thank you for choosing Fastgate Cargo Services');
 
     notifyListeners();
   }

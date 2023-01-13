@@ -115,11 +115,11 @@ class _AdminNotificationsState extends State<AdminNotifications> {
                   isActive: _currentStep == widget.nots.indexOf(not),
                   title: FxText.bodyLarge(not.category!, fontWeight: 600),
                   subtitle:
-                      FxText.bodySmall('By ' + not.createdBy!, fontWeight: 500),
+                      FxText.bodySmall('By ${not.createdBy!}', fontWeight: 500),
                   state: StepState.indexed,
                   content: SizedBox(
                     width: MediaQuery.of(context).size.width,
-                    child: FxText.bodySmall(" - " + not.message!,
+                    child: FxText.bodySmall(" - ${not.message!}",
                         color: theme.colorScheme.onBackground),
                   ),
                 ),

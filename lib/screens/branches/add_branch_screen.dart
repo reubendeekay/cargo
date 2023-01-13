@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 
 import 'package:cargo/helpers/my_loader.dart';
@@ -489,14 +491,14 @@ class _AddBranchScreenState extends State<AddBranchScreen> {
                                         'Branch details successfully added'),
                                   ));
                                 },
+                          style: ButtonStyle(
+                              padding: MaterialStateProperty.all(
+                                  FxSpacing.xy(16, 0))),
                           child: isLoading
                               ? const MyLoader()
                               : FxText.bodyMedium("Add Branch",
                                   fontWeight: 600,
                                   color: theme.colorScheme.onPrimary),
-                          style: ButtonStyle(
-                              padding: MaterialStateProperty.all(
-                                  FxSpacing.xy(16, 0))),
                         ),
                       ),
                     ),

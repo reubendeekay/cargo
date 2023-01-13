@@ -1,10 +1,10 @@
+// ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api
+
 import 'dart:io';
 
 import 'package:cargo/helpers/my_loader.dart';
-import 'package:cargo/models/branch_model.dart';
 import 'package:cargo/models/user_model.dart';
 import 'package:cargo/providers/auth_provider.dart';
-import 'package:cargo/providers/branch_provider.dart';
 import 'package:cargo/theme/app_theme.dart';
 import 'package:cargo/theme/custom_theme.dart';
 import 'package:cargo/widgets/my_dropdown.dart';
@@ -391,14 +391,14 @@ class _AddAgentScreenState extends State<AddAgentScreen> {
                               content: Text('Agent details successfully added'),
                             ));
                           },
+                          style: ButtonStyle(
+                              padding: MaterialStateProperty.all(
+                                  FxSpacing.xy(16, 0))),
                           child: isLoading
                               ? const MyLoader()
                               : FxText.bodyMedium("Create Agent",
                                   fontWeight: 600,
                                   color: theme.colorScheme.onPrimary),
-                          style: ButtonStyle(
-                              padding: MaterialStateProperty.all(
-                                  FxSpacing.xy(16, 0))),
                         ),
                       ),
                     ),

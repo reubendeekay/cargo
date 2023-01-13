@@ -1,7 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cargo/helpers/cached_image.dart';
 import 'package:cargo/providers/auth_provider.dart';
 import 'package:cargo/screens/agent/agent_dashboard.dart';
-import 'package:cargo/screens/agent/homepage.dart';
+
 import 'package:cargo/screens/auth/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

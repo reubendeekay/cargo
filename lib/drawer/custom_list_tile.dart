@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CustomListTile extends StatelessWidget {
   final bool isCollapsed;
@@ -33,7 +34,7 @@ class CustomListTile extends StatelessWidget {
         height: 55,
         decoration: BoxDecoration(
           color: isSelected ? Colors.orange : null,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
           children: [
@@ -73,7 +74,7 @@ class CustomListTile extends StatelessWidget {
                       flex: 4,
                       child: Text(
                         title,
-                        style: const TextStyle(
+                        style: GoogleFonts.ibmPlexSans(
                           color: Colors.white,
                           fontSize: 15,
                         ),
