@@ -14,7 +14,8 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:provider/provider.dart';
 
 class AllShipments extends StatefulWidget {
-  const AllShipments({Key? key}) : super(key: key);
+  const AllShipments({Key? key, this.isAdmin = false}) : super(key: key);
+  final bool isAdmin;
 
   @override
   State<AllShipments> createState() => _AllShipmentsState();
@@ -25,6 +26,7 @@ class _AllShipmentsState extends State<AllShipments> {
   late ThemeData theme;
   String? phoneNumber;
   bool isTrue = false;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -120,8 +122,21 @@ class _AllShipmentsState extends State<AllShipments> {
                   ),
                   GestureDetector(
                     onTap: () async {
+                      setState(() {
+                        isLoading = true;
+                      });
+                      if (widget.isAdmin) {
+                        setState(() {
+                          isTrue = true;
+                          isLoading = false;
+                        });
+                        return;
+                      }
                       await Provider.of<CargoProvider>(context, listen: false)
                           .sendOtp(phoneNumber!);
+                      setState(() {
+                        isLoading = false;
+                      });
                       showDialog(
                           context: context,
                           builder: (ctx) => VerificationDialog(
@@ -138,10 +153,18 @@ class _AllShipmentsState extends State<AllShipments> {
                       decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(4)),
-                      child: const Icon(
-                        Icons.search,
-                        color: Colors.grey,
-                      ),
+                      child: isLoading
+                          ? const Center(
+                              child: SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(
+                                      color: kPrimaryColor)),
+                            )
+                          : const Icon(
+                              Icons.search,
+                              color: Colors.grey,
+                            ),
                     ),
                   ),
                 ],
@@ -196,9 +219,11 @@ class ShipmentTile extends StatelessWidget {
           children: [
             Container(
               padding: const EdgeInsets.all(4),
-              color: kPrimaryColor.withOpacity(0.2),
+              decoration: BoxDecoration(
+                  color: kPrimaryColor.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(4)),
               child: const Icon(
-                Icons.card_giftcard_sharp,
+                MdiIcons.package,
                 color: kPrimaryColor,
                 size: 14,
               ),
@@ -224,7 +249,7 @@ class ShipmentTile extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        cargo.docNo!,
+                        cargo.docNo!.replaceAll('_', '/').toUpperCase(),
                         style: const TextStyle(
                             fontSize: 14, fontWeight: FontWeight.bold),
                       ),
@@ -236,13 +261,13 @@ class ShipmentTile extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 5,
                   ),
                   Row(
                     children: [
                       Text(
                         cargo.origin!,
-                        style: const TextStyle(fontSize: 14),
+                        style: const TextStyle(fontSize: 13),
                       ),
                       const SizedBox(
                         width: 5,
@@ -253,10 +278,13 @@ class ShipmentTile extends StatelessWidget {
                       ),
                       Text(
                         cargo.destination!,
-                        style: const TextStyle(fontSize: 14),
+                        style: const TextStyle(fontSize: 13),
                       ),
                     ],
-                  )
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
                 ],
               ),
             )

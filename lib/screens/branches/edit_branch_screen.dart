@@ -49,7 +49,7 @@ class _EditBranchScreenState extends State<EditBranchScreen> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: theme.scaffoldBackgroundColor,
-          elevation: 0,
+          elevation: 0.5,
           leading: IconButton(
             onPressed: () => Navigator.of(context).pop(),
             icon: Icon(
@@ -58,10 +58,10 @@ class _EditBranchScreenState extends State<EditBranchScreen> {
               color: theme.colorScheme.onBackground,
             ),
           ),
-          title: FxText.titleMedium("Edit ${widget.branch.name} Branch",
-              fontWeight: 600),
+          title: FxText.titleMedium("Edit Branch", fontWeight: 600),
         ),
-        body: ListView(padding: FxSpacing.nTop(20), children: <Widget>[
+        body: ListView(padding: FxSpacing.nTop(15), children: <Widget>[
+          const SizedBox(height: 15),
           FxText.bodyLarge("General information",
               fontWeight: 600, letterSpacing: 0),
           Column(
@@ -122,6 +122,8 @@ class _EditBranchScreenState extends State<EditBranchScreen> {
                       branchAdress = val;
                     });
                   },
+                  maxLength: null,
+                  maxLines: null,
                   initialValue: widget.branch.address,
                   style: FxTextStyle.titleSmall(
                       letterSpacing: 0,
@@ -155,7 +157,7 @@ class _EditBranchScreenState extends State<EditBranchScreen> {
                       size: 22,
                     ),
                     isDense: true,
-                    contentPadding: const EdgeInsets.all(0),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 10),
                   ),
                   keyboardType: TextInputType.name,
                 ),
@@ -380,64 +382,58 @@ class _EditBranchScreenState extends State<EditBranchScreen> {
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.only(top: 24),
-                    child: Center(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(4)),
-                          boxShadow: [
-                            BoxShadow(
-                              color: theme.colorScheme.primary.withAlpha(28),
-                              blurRadius: 4,
-                              offset: const Offset(0, 1),
-                            ),
-                          ],
+                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    width: double.infinity,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(4)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: theme.colorScheme.primary.withAlpha(28),
+                          blurRadius: 4,
+                          offset: const Offset(0, 1),
                         ),
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            setState(() {
-                              isLoading = true;
-                            });
-                            final branch = BranchModel(
-                              name: branchName ?? widget.branch.name,
-                              managerName:
-                                  managerName ?? widget.branch.managerName,
-                              managerId: managerId ?? widget.branch.managerId,
-                              email: emailAdress ?? widget.branch.email,
-                              imageFile: image,
-                              phoneNumber:
-                                  phoneNumber ?? widget.branch.phoneNumber,
-                              address: branchAdress ?? widget.branch.address,
-                              imageUrl: widget.branch.imageUrl,
-                              country: widget.branch.country,
-                              region: widget.branch.region,
-                            );
+                      ],
+                    ),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        final branch = BranchModel(
+                          name: branchName ?? widget.branch.name,
+                          managerName: managerName ?? widget.branch.managerName,
+                          managerId: managerId ?? widget.branch.managerId,
+                          email: emailAdress ?? widget.branch.email,
+                          imageFile: image,
+                          phoneNumber: phoneNumber ?? widget.branch.phoneNumber,
+                          address: branchAdress ?? widget.branch.address,
+                          imageUrl: widget.branch.imageUrl,
+                          country: widget.branch.country,
+                          region: widget.branch.region,
+                        );
 
-                            await Provider.of<BranchProvider>(context,
-                                    listen: false)
-                                .editBranch(branch);
-                            setState(() {
-                              isLoading = false;
-                            });
-                            Navigator.of(context).pop();
+                        await Provider.of<BranchProvider>(context,
+                                listen: false)
+                            .editBranch(branch);
+                        setState(() {
+                          isLoading = false;
+                        });
+                        Navigator.of(context).pop();
 
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              content:
-                                  Text('Branch details successfully edited'),
-                            ));
-                          },
-                          child: isLoading
-                              ? const MyLoader()
-                              : FxText.bodyMedium("Add Branch",
-                                  fontWeight: 600,
-                                  color: theme.colorScheme.onPrimary),
-                          style: ButtonStyle(
-                              padding: MaterialStateProperty.all(
-                                  FxSpacing.xy(16, 0))),
-                        ),
-                      ),
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text('Branch details successfully edited'),
+                        ));
+                      },
+                      child: isLoading
+                          ? const MyLoader()
+                          : FxText.bodyMedium("Edit Branch",
+                              fontWeight: 600,
+                              color: theme.colorScheme.onPrimary),
+                      style: ButtonStyle(
+                          padding:
+                              MaterialStateProperty.all(FxSpacing.xy(16, 0))),
                     ),
                   ),
                 ],

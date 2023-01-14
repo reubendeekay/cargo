@@ -32,7 +32,9 @@ class _VerificationDialogState extends State<VerificationDialog> {
 
   dialogContent(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
-    final cargo = Provider.of<CargoProvider>(context, listen: false);
+    final cargo = Provider.of<CargoProvider>(
+      context,
+    );
 
     return Container(
       decoration: BoxDecoration(
@@ -138,10 +140,12 @@ class _VerificationDialogState extends State<VerificationDialog> {
                 const SizedBox(width: 4),
                 InkWell(
                     onTap: () async {
-                      await cargo.twilioFlutter!.sendSMS(
-                          toNumber: '+${cargo.phoneNumber!}',
-                          messageBody:
-                              'Dear customer, your verificication code for shipment ${cargo.cargo.docNo} is ${cargo.sms} . Fastgate cargo Services');
+                      await Provider.of<CargoProvider>(context, listen: false)
+                          .twilioFlutter!
+                          .sendSMS(
+                              toNumber: '+${cargo.phoneNumber!}',
+                              messageBody:
+                                  'Dear customer, your verificication code for shipment ${cargo.cargo.docNo} is ${cargo.sms} . Fastgate cargo Services');
                     },
                     child: text('Enter OTP',
                         fontFamily: 'Medium',
@@ -153,7 +157,7 @@ class _VerificationDialogState extends State<VerificationDialog> {
               height: 10,
             ),
             text(
-                'Message sent to ${'${cargo.phoneNumber!.substring(0, 4)}* * * * * *${cargo.phoneNumber!.substring(9, cargo.phoneNumber!.length - 1)}'}',
+                'Message sent to ${'${cargo.phoneNumber!.substring(0, 4)}* * * * * *${cargo.phoneNumber!.substring(9, cargo.phoneNumber!.length)}'}',
                 fontSize: 14),
           ],
         ),

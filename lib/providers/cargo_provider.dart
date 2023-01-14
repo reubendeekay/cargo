@@ -44,17 +44,18 @@ class CargoProvider with ChangeNotifier {
   }
 
   Future<void> sendOtp(String pN) async {
+    phoneNumber = pN;
     if (twilioFlutter == null) {
       await initialiseTwillio();
     }
     otp = getOtp().toString();
-    phoneNumber = pN;
 
     final phone = pN.replaceAll(' ', '').replaceAll('+', '');
     await twilioFlutter!.sendSMS(
         toNumber: '+$phone',
         messageBody:
             'Dear customer, your verificication code for viewing all your shipment is $otp . Fastgate Cargo Services');
+    notifyListeners();
   }
 
   Future<void> getShipment(String trackingNo) async {

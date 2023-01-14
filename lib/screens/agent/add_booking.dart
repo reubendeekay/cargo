@@ -53,7 +53,7 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: theme.scaffoldBackgroundColor,
-        elevation: 0,
+        elevation: 0.5,
         leading: IconButton(
           onPressed: () => Navigator.of(context).pop(),
           icon: Icon(
@@ -66,9 +66,12 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
         title: FxText.titleMedium("Add Shipment", fontWeight: 600),
       ),
       body: ListView(
-        padding: FxSpacing.nTop(20),
+        padding: FxSpacing.nTop(15),
         physics: const BouncingScrollPhysics(),
         children: <Widget>[
+          const SizedBox(
+            height: 15,
+          ),
           FxText.bodyLarge("Personal information",
               fontWeight: 600, letterSpacing: 0),
           Column(

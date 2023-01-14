@@ -2,7 +2,6 @@ import 'package:cargo/constants.dart';
 import 'package:cargo/models/notification_model.dart';
 import 'package:cargo/providers/notifications_provider.dart';
 import 'package:cargo/screens/notifications/add_notifications.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutx/flutx.dart';
 import 'package:get/route_manager.dart';
@@ -21,7 +20,8 @@ class NotificationsScreen extends StatelessWidget {
       backgroundColor: kPrimaryColor,
       child: Scaffold(
         appBar: AppBar(
-          elevation: 0,
+          elevation: 0.5,
+          centerTitle: true,
           leading: InkWell(
             onTap: () => Navigator.of(context).pop(),
             child: const Icon(

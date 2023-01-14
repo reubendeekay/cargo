@@ -2,6 +2,7 @@ import 'package:cargo/drawer/bottom_user_info.dart';
 import 'package:cargo/drawer/custom_list_tile.dart';
 import 'package:cargo/drawer/header.dart';
 import 'package:cargo/providers/auth_provider.dart';
+import 'package:cargo/screens/agent/admin_dashboard.dart';
 import 'package:cargo/screens/agent/agent_dashboard.dart';
 import 'package:cargo/screens/agent/search_history.dart';
 import 'package:cargo/screens/all_shipments.dart';
@@ -156,7 +157,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       userData.user == null
                           ? await userData.getUser(uid)
                           : null;
-                      Get.to(() => const AgentDashboard());
+                      Get.to(() => const AdminDashboard());
                     } else {
                       Get.to(() => const LogInScreen());
                     }

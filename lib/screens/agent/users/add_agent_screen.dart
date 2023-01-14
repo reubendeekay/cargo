@@ -51,7 +51,7 @@ class _AddAgentScreenState extends State<AddAgentScreen> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: theme.scaffoldBackgroundColor,
-          elevation: 0,
+          elevation: 0.5,
           leading: IconButton(
             onPressed: () => Navigator.of(context).pop(),
             icon: Icon(
@@ -60,9 +60,12 @@ class _AddAgentScreenState extends State<AddAgentScreen> {
               color: theme.colorScheme.onBackground,
             ),
           ),
-          title: FxText.titleMedium("Add Branch", fontWeight: 600),
+          title: FxText.titleMedium("Add Agent", fontWeight: 600),
         ),
-        body: ListView(padding: FxSpacing.nTop(20), children: <Widget>[
+        body: ListView(padding: FxSpacing.nTop(15), children: <Widget>[
+          SizedBox(
+            height: 10,
+          ),
           FxText.bodyLarge("Personal information",
               fontWeight: 600, letterSpacing: 0),
           Column(
@@ -215,7 +218,7 @@ class _AddAgentScreenState extends State<AddAgentScreen> {
                           color: theme.colorScheme.onBackground,
                           fontWeight: 500),
                       decoration: InputDecoration(
-                        hintText: "Phone Number(Including country code)",
+                        hintText: "Phone Number eg. 254xxx...",
                         hintStyle: FxTextStyle.titleSmall(
                             letterSpacing: 0,
                             color: theme.colorScheme.onBackground,
@@ -351,56 +354,52 @@ class _AddAgentScreenState extends State<AddAgentScreen> {
                   ),
                   Container(
                     margin: const EdgeInsets.only(top: 24),
-                    child: Center(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(4)),
-                          boxShadow: [
-                            BoxShadow(
-                              color: theme.colorScheme.primary.withAlpha(28),
-                              blurRadius: 4,
-                              offset: const Offset(0, 1),
-                            ),
-                          ],
+                    width: double.infinity,
+                    height: 45,
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(4)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: theme.colorScheme.primary.withAlpha(28),
+                          blurRadius: 4,
+                          offset: const Offset(0, 1),
                         ),
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            setState(() {
-                              isLoading = true;
-                            });
-                            final user = UserModel(
-                                fullName: fullName,
-                                password: password,
-                                branch: branc,
-                                email: email,
-                                imageFile: image!,
-                                phoneNumber: phoneNumber,
-                                role: role);
+                      ],
+                    ),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        final user = UserModel(
+                            fullName: fullName,
+                            password: password,
+                            branch: branc,
+                            email: email,
+                            imageFile: image!,
+                            phoneNumber: phoneNumber,
+                            role: role);
 
-                            await Provider.of<AuthProvider>(context,
-                                    listen: false)
-                                .createAgent(user);
-                            setState(() {
-                              isLoading = false;
-                            });
-                            Navigator.of(context).pop();
+                        await Provider.of<AuthProvider>(context, listen: false)
+                            .createAgent(user);
+                        setState(() {
+                          isLoading = false;
+                        });
+                        Navigator.of(context).pop();
 
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              content: Text('Agent details successfully added'),
-                            ));
-                          },
-                          style: ButtonStyle(
-                              padding: MaterialStateProperty.all(
-                                  FxSpacing.xy(16, 0))),
-                          child: isLoading
-                              ? const MyLoader()
-                              : FxText.bodyMedium("Create Agent",
-                                  fontWeight: 600,
-                                  color: theme.colorScheme.onPrimary),
-                        ),
-                      ),
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text('Agent details successfully added'),
+                        ));
+                      },
+                      style: ButtonStyle(
+                          padding:
+                              MaterialStateProperty.all(FxSpacing.xy(16, 0))),
+                      child: isLoading
+                          ? const MyLoader()
+                          : FxText.bodyMedium("Create Agent",
+                              fontWeight: 600,
+                              color: theme.colorScheme.onPrimary),
                     ),
                   ),
                 ],

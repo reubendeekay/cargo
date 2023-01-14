@@ -186,9 +186,9 @@ class _CargoTrackingScreenState extends State<CargoTrackingScreen> {
                     }
                   },
                   elevation: 0,
+                  borderRadiusAll: 4,
                   child: FxText.bodyLarge("Track Cargo",
                       color: theme.colorScheme.onSecondary),
-                  borderRadiusAll: 4,
                 ),
               ),
             ],

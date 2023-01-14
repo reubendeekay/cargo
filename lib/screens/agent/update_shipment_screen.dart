@@ -51,7 +51,7 @@ class _UpdateShipmentScreenState extends State<UpdateShipmentScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: theme.scaffoldBackgroundColor,
-        elevation: 0,
+        elevation: 0.5,
         leading: IconButton(
           onPressed: () => Navigator.of(context).pop(),
           icon: Icon(
@@ -66,6 +66,9 @@ class _UpdateShipmentScreenState extends State<UpdateShipmentScreen> {
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 15),
         children: [
+          const SizedBox(
+            height: 15,
+          ),
           FxText.bodyLarge("Cargo information",
               fontWeight: 600, letterSpacing: 0),
           Container(

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cargo/helpers/cached_image.dart';
 import 'package:cargo/models/user_model.dart';
 import 'package:cargo/screens/agent/users/add_agent_screen.dart';
@@ -15,7 +16,7 @@ class AgentsManagement extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
+        elevation: 0.5,
         leading: IconButton(
           onPressed: () => Navigator.of(context).pop(),
           icon: const Icon(
@@ -25,6 +26,7 @@ class AgentsManagement extends StatelessWidget {
         ),
         title: FxText.titleMedium("Agents Management", fontWeight: 600),
       ),
+      backgroundColor: Colors.grey[100],
       body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection('users')
@@ -84,16 +86,16 @@ class AgentCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+      margin: const EdgeInsets.symmetric(vertical: 1, horizontal: 5),
+      padding: EdgeInsets.all(10),
+      color: Colors.white,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-            width: size.width * 0.25,
-            height: 100,
-            child: cachedImage(
+          CircleAvatar(
+            radius: 30,
+            backgroundImage: CachedNetworkImageProvider(
               user.profilePic!,
-              fit: BoxFit.cover,
             ),
           ),
           const SizedBox(
@@ -103,82 +105,82 @@ class AgentCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                detail(Icons.person_outline, user.fullName!),
+                detail(Icons.person_outline, user.fullName!,
+                    textStyle: const TextStyle(
+                      fontWeight: FontWeight.w500,
+                    )),
                 const SizedBox(
                   height: 5,
                 ),
-                detail(Icons.email_outlined, user.email!),
+                detail(Icons.email_outlined, user.email!,
+                    textStyle:
+                        TextStyle(fontSize: 12, color: Colors.grey[800])),
                 const SizedBox(
-                  height: 5,
+                  height: 2,
                 ),
-                detail(Icons.phone, user.phoneNumber!),
-                const SizedBox(
-                  height: 5,
-                ),
-                detail(Icons.apartment_outlined, user.branch!),
-                const SizedBox(
-                  height: 5,
-                ),
+                detail(Icons.location_on_rounded, user.branch!,
+                    textStyle:
+                        const TextStyle(fontSize: 10, color: Colors.grey)),
               ],
             ),
           ),
-          PopupMenuButton(
-            icon: const Icon(Icons.more_vert),
-            onSelected: (i) async {
-              if (i == 0) {
-                final res = await http.post(
-                    Uri.parse(
-                        'https://us-central1-cargo-9420a.cloudfunctions.net/deleteUser'),
-                    body: {
-                      'uid': user.userId,
-                    });
-
-                if (res.statusCode == 200) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      backgroundColor: Colors.green,
-                      content: FxText.titleMedium(
-                        'User deleted successfully',
-                        color: Colors.white,
-                      )));
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      backgroundColor: Colors.red,
-                      content: FxText.titleMedium(
-                        'Error deleting user',
-                        color: Colors.white,
-                      )));
-                }
-              }
-            },
-            itemBuilder: (i) {
-              return [
-                PopupMenuItem(
-                  value: 0,
-                  child: FxText.titleMedium(
-                    'Delete',
-                    color: Colors.red,
+          Column(
+            children: [
+              Container(
+                width: 70,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                decoration: BoxDecoration(
+                    color: Colors.green[100],
+                    borderRadius: BorderRadius.circular(30)),
+                child: const Center(
+                  child: Text(
+                    'Call',
+                    style: TextStyle(color: Colors.green, fontSize: 10),
                   ),
                 ),
-              ];
-            },
-          )
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Container(
+                width: 70,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                decoration: BoxDecoration(
+                    color: Colors.red[100],
+                    borderRadius: BorderRadius.circular(30)),
+                child: const Center(
+                  child: Text(
+                    'Delete',
+                    style: TextStyle(color: Colors.red, fontSize: 10),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            width: 10,
+          ),
         ],
       ),
     );
   }
 
-  Widget detail(IconData icon, String value) {
+  Widget detail(IconData icon, String value, {textStyle = const TextStyle()}) {
     return Row(
       children: [
         Icon(
           icon,
           size: 18,
+          color: Colors.grey,
         ),
         const SizedBox(
-          width: 5,
+          width: 10,
         ),
         Text(
           value,
+          style: textStyle,
         )
       ],
     );

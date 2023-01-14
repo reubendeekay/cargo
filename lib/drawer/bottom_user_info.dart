@@ -2,6 +2,7 @@
 
 import 'package:cargo/helpers/cached_image.dart';
 import 'package:cargo/providers/auth_provider.dart';
+import 'package:cargo/screens/agent/admin_dashboard.dart';
 import 'package:cargo/screens/agent/agent_dashboard.dart';
 
 import 'package:cargo/screens/auth/login_screen.dart';
@@ -39,7 +40,7 @@ class _BottomUserInfoState extends State<BottomUserInfo> {
                 final userData =
                     Provider.of<AuthProvider>(context, listen: false);
                 userData.user == null ? await userData.getUser(uid) : null;
-                Get.to(() => const AgentDashboard());
+                Get.to(() => const AdminDashboard());
               } else {
                 Get.to(() => const LogInScreen());
               }

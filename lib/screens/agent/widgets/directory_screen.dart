@@ -1,7 +1,5 @@
 import 'package:cargo/models/cargo_model.dart';
 import 'package:cargo/providers/cargo_provider.dart';
-import 'package:cargo/screens/agent/widgets/my_date_widget.dart';
-import 'package:cargo/widgets/my_search_button.dart';
 import 'package:cargo/widgets/my_table.dart';
 import 'package:flutter/material.dart';
 import 'package:flutx/flutx.dart';
@@ -24,7 +22,8 @@ class _CargoDirectoryState extends State<CargoDirectory> {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
+        elevation: 0.5,
+        centerTitle: true,
         leading: InkWell(
           onTap: () => Navigator.of(context).pop(),
           child: const Icon(
