@@ -8,6 +8,7 @@ import 'package:cargo/theme/app_theme.dart';
 import 'package:cargo/theme/custom_theme.dart';
 import 'package:cargo/widgets/my_dropdown.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:enhanced_future_builder/enhanced_future_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutx/flutx.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -25,15 +26,26 @@ class _UpdateShipmentScreenState extends State<UpdateShipmentScreen> {
   late CustomTheme customTheme;
   late ThemeData theme;
   TextEditingController? trackingNumber = TextEditingController();
+  FocusNode? focusNode;
   @override
   void initState() {
     super.initState();
     customTheme = AppTheme.customTheme;
     theme = AppTheme.theme;
+    focusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    focusNode!.dispose();
+    super.dispose();
   }
 
   TextEditingController status = TextEditingController();
   TextEditingController location = TextEditingController();
+  TextEditingController weight = TextEditingController();
+  TextEditingController shippingFee = TextEditingController();
+
   final options = [
     "Shipment received at",
     "Shipment loaded on",
@@ -41,8 +53,8 @@ class _UpdateShipmentScreenState extends State<UpdateShipmentScreen> {
     "Arrived at ",
     "Delivered at",
   ];
+  bool isArrived = false;
 
-  String? weight;
   String? paymentMode;
   String? shippingMode;
   bool isLoading = false;
@@ -78,6 +90,7 @@ class _UpdateShipmentScreenState extends State<UpdateShipmentScreen> {
                 Expanded(
                   child: TextField(
                     controller: trackingNumber!,
+                    focusNode: focusNode,
                     style: FxTextStyle.titleSmall(
                         letterSpacing: 0,
                         color: theme.colorScheme.onBackground,
@@ -121,6 +134,7 @@ class _UpdateShipmentScreenState extends State<UpdateShipmentScreen> {
                 ),
                 GestureDetector(
                   onTap: () {
+                    focusNode!.unfocus();
                     setState(() {});
                   },
                   child: Container(
@@ -139,26 +153,24 @@ class _UpdateShipmentScreenState extends State<UpdateShipmentScreen> {
             ),
           ),
           if (trackingNumber != null && trackingNumber!.text.length > 13)
-            FutureBuilder<CargoModel>(
+            EnhancedFutureBuilder(
                 future: Provider.of<CargoProvider>(context, listen: false)
                     .fetchUserCargo(trackingNumber!.text.trim()),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        SizedBox(
-                          height: 100,
-                        ),
-                        Center(
-                          child: MyLoader(
-                            color: kPrimaryColor,
-                          ),
-                        ),
-                      ],
-                    );
-                  }
-
+                rememberFutureResult: true,
+                whenNotDone: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    SizedBox(
+                      height: 100,
+                    ),
+                    Center(
+                      child: MyLoader(
+                        color: kPrimaryColor,
+                      ),
+                    ),
+                  ],
+                ),
+                whenDone: (CargoModel carg) {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -173,15 +185,15 @@ class _UpdateShipmentScreenState extends State<UpdateShipmentScreen> {
                           ),
                           const Spacer(),
                           FxText.bodySmall(
-                            snapshot.data!.deliveryDate == null
+                            carg.deliveryDate == null
                                 ? 'No delivery date set'
-                                : snapshot.data!.deliveryDate!
+                                : carg.deliveryDate!
                                             .toDate()
                                             .difference(DateTime.now())
                                             .inDays <
                                         1
                                     ? 'Delivered'
-                                    : '${snapshot.data!.deliveryDate!.toDate().difference(DateTime.now()).inDays} days left',
+                                    : '${carg.deliveryDate!.toDate().difference(DateTime.now()).inDays} days left',
                             color: Colors.green,
                           ),
                         ],
@@ -204,12 +216,12 @@ class _UpdateShipmentScreenState extends State<UpdateShipmentScreen> {
                           padding: const EdgeInsets.all(15.0),
                           child: Column(children: [
                             trackingWidget(
-                                snapshot.data!.origin!,
+                                carg.origin!,
                                 'Tracking No: '
-                                '${snapshot.data!.docNo!.replaceAll('_', '/')}'),
+                                '${carg.docNo!.replaceAll('_', '/')}'),
                             const SizedBox(height: 20),
-                            trackingWidget(snapshot.data!.destination!,
-                                'Description: ${snapshot.data!.packageName!}'),
+                            trackingWidget(carg.destination!,
+                                'Description: ${carg.packageName!}'),
                           ]),
                         ),
                       ),
@@ -221,22 +233,39 @@ class _UpdateShipmentScreenState extends State<UpdateShipmentScreen> {
                       MyDropDown(
                           selectedOption: (val) {
                             status = TextEditingController(text: val);
+                            setState(() {
+                              isArrived = val.contains('rrive');
+                            });
                           },
                           hintText:
                               status.text.isNotEmpty ? status.text : 'Status',
                           options: options),
-                      if (status.text == 'Arrived at')
-                        Container(
-                          margin: const EdgeInsets.only(top: 12),
+                      if (isArrived)
+                        MyDropDown(
+                            selectedOption: (val) {
+                              setState(() {
+                                shippingMode = val;
+                              });
+                            },
+                            hintText: 'Shipping method',
+                            options: const [
+                              'Sea',
+                              'Air',
+                            ]),
+                      if (isArrived)
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 500),
+                          margin: const EdgeInsets.only(top: 5),
                           child: TextFormField(
-                            controller: location,
+                            controller: weight,
                             keyboardType: TextInputType.number,
                             style: FxTextStyle.titleSmall(
                                 letterSpacing: 0,
                                 color: theme.colorScheme.onBackground,
                                 fontWeight: 500),
                             decoration: InputDecoration(
-                              hintText: "Weight",
+                              hintText:
+                                  "Weight in ${shippingMode == 'Sea' ? 'CPM' : 'Kg'}",
                               hintStyle: FxTextStyle.titleSmall(
                                   letterSpacing: 0,
                                   color: theme.colorScheme.onBackground,
@@ -259,7 +288,7 @@ class _UpdateShipmentScreenState extends State<UpdateShipmentScreen> {
                               filled: true,
                               fillColor: customTheme.card,
                               prefixIcon: const Icon(
-                                MdiIcons.web,
+                                MdiIcons.weight,
                                 size: 22,
                               ),
                               isDense: true,
@@ -268,7 +297,52 @@ class _UpdateShipmentScreenState extends State<UpdateShipmentScreen> {
                             textCapitalization: TextCapitalization.sentences,
                           ),
                         ),
-                      Container(
+                      if (isArrived)
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 500),
+                          margin: const EdgeInsets.only(top: 12),
+                          child: TextFormField(
+                            controller: shippingFee,
+                            keyboardType: TextInputType.number,
+                            style: FxTextStyle.titleSmall(
+                                letterSpacing: 0,
+                                color: theme.colorScheme.onBackground,
+                                fontWeight: 500),
+                            decoration: InputDecoration(
+                              hintText: "Shipping Fee",
+                              hintStyle: FxTextStyle.titleSmall(
+                                  letterSpacing: 0,
+                                  color: theme.colorScheme.onBackground,
+                                  fontWeight: 500),
+                              border: const OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(4),
+                                  ),
+                                  borderSide: BorderSide.none),
+                              enabledBorder: const OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(4),
+                                  ),
+                                  borderSide: BorderSide.none),
+                              focusedBorder: const OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(4),
+                                  ),
+                                  borderSide: BorderSide.none),
+                              filled: true,
+                              fillColor: customTheme.card,
+                              prefixIcon: const Icon(
+                                MdiIcons.cash,
+                                size: 22,
+                              ),
+                              isDense: true,
+                              contentPadding: const EdgeInsets.all(0),
+                            ),
+                            textCapitalization: TextCapitalization.sentences,
+                          ),
+                        ),
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 500),
                         margin: const EdgeInsets.only(top: 12),
                         child: TextFormField(
                           controller: location,
@@ -325,7 +399,9 @@ class _UpdateShipmentScreenState extends State<UpdateShipmentScreen> {
                               return;
                             }
 
-                            final cargo = snapshot.data!;
+                            final cargo = carg;
+                            cargo.weight = weight.text;
+                            cargo.shippingFee = shippingFee.text;
                             if (status.text == options[0]) {
                               cargo.shipping =
                                   CargoStatus(Timestamp.now(), location.text);
@@ -348,8 +424,11 @@ class _UpdateShipmentScreenState extends State<UpdateShipmentScreen> {
 
                             await Provider.of<CargoProvider>(context,
                                     listen: false)
-                                .updateTransit(cargo, status.text.toLowerCase(),
-                                    location.text);
+                                .updateTransit(
+                              cargo,
+                              status.text.toLowerCase(),
+                              location.text,
+                            );
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text('Updated'),

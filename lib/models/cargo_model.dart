@@ -12,8 +12,8 @@ class CargoModel {
   final String? currentLocation;
   final Timestamp? deliveryDate;
   final String? userId;
-  final String? shippingFee;
-  final String? weight;
+  String? shippingFee;
+  String? weight;
   final String? packageName;
   final String? phoneNumber;
   CargoStatus? received;

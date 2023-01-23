@@ -239,6 +239,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.6"
+  enhanced_future_builder:
+    dependency: "direct main"
+    description:
+      name: enhanced_future_builder
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   extension:
     dependency: transitive
     description:

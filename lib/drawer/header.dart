@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CustomDrawerHeader extends StatelessWidget {
@@ -21,9 +20,9 @@ class CustomDrawerHeader extends StatelessWidget {
           SizedBox(height: 40, child: Image.asset('assets/images/logo.png')),
           if (isColapsed) const SizedBox(width: 5),
           if (isColapsed)
-            const Text(
-              'Fastgate Cargo',
-              style: TextStyle(
+            Text(
+              'Fastgate Cargo'.toUpperCase(),
+              style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Colors.white),

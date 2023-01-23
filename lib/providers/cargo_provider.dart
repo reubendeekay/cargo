@@ -110,7 +110,10 @@ class CargoProvider with ChangeNotifier {
   }
 
   Future<void> updateTransit(
-      CargoModel cargo, String status, String location) async {
+    CargoModel cargo,
+    String status,
+    String location,
+  ) async {
     final doc = cargo.docNo!.split('/').join('_');
     await FirebaseFirestore.instance
         .collection('cargos')
