@@ -164,8 +164,8 @@ class ShipmentDetails extends StatelessWidget {
               ),
               const Spacer(),
               FxText(
-                'Not paid',
-                color: Colors.red,
+                cargo.delivered != null ? 'Paid' : 'Not paid',
+                color: cargo.delivered != null ? Colors.green : Colors.red,
                 fontSize: 12,
               ),
             ],
@@ -188,7 +188,7 @@ class ShipmentDetails extends StatelessWidget {
             ],
           ),
           const SizedBox(
-            height: 40,
+            height: 10,
           )
         ],
       ),

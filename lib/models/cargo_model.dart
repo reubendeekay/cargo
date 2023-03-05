@@ -1,3 +1,4 @@
+import 'package:cargo/helpers/parse_phone.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
@@ -14,6 +15,8 @@ class CargoModel {
   final String? userId;
   String? shippingFee;
   String? weight;
+  String? shippingType;
+  String? carrierNo;
   final String? packageName;
   final String? phoneNumber;
   CargoStatus? received;
@@ -44,6 +47,8 @@ class CargoModel {
     this.readyForDelivery,
     this.shippingFee,
     this.weight,
+    this.carrierNo,
+    this.shippingType,
   });
 
   factory CargoModel.fromJson(DocumentSnapshot json) => CargoModel(
@@ -59,8 +64,10 @@ class CargoModel {
         phoneNumber: json["phoneNumber"],
         customerName: json["customerName"],
         deliveryDate: json["deliveryDate"],
+        // carrierNo: json["carrierNo"],
+        // shippingType: json['shippingType'],
         packageName: json["packageName"],
-        weight: json["weight"] + ' Kg',
+        weight: (json["weight"] ?? '') + ' Kg',
         delivered: json["delivered"] == null
             ? null
             : CargoStatus.fromJson(json["delivered"]),
@@ -82,7 +89,7 @@ class CargoModel {
       );
 
   Map<String, dynamic> toJson() => {
-        "id": docNo,
+        "id": docNo!.toUpperCase(),
         "createdAt": createdAt,
         "origin": origin,
         "destination": destination,
@@ -102,17 +109,18 @@ class CargoModel {
         "readyForDelivery": readyForDelivery?.toJson(),
         "shippingFee": shippingFee,
         "weight": weight,
+        'shippingType': shippingType,
+        'carrierNo': carrierNo,
       };
 
   List<String> row() {
     return [
-      docNo!,
+      docNo!.replaceAll('_', '/'),
       origin!,
       destination!,
-      phoneNumber!,
+      parsePhone(phoneNumber!),
       currentLocation!,
       DateFormat('dd/MMM/yyyy').format(createdAt!.toDate()),
-      paymentMode!,
     ];
   }
 }

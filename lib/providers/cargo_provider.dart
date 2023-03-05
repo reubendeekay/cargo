@@ -22,7 +22,7 @@ class CargoProvider with ChangeNotifier {
 
     await FirebaseFirestore.instance
         .collection('cargos')
-        .doc(doc)
+        .doc(doc.toUpperCase())
         .set(cargo.toJson());
 
     await twilioFlutter!.sendSMS(
@@ -36,7 +36,7 @@ class CargoProvider with ChangeNotifier {
   Future<CargoModel> fetchUserCargo(String docNo) async {
     final cargoSnapshot = await FirebaseFirestore.instance
         .collection('cargos')
-        .doc(docNo.replaceAll('/', '_'))
+        .doc(docNo.replaceAll('/', '_').toUpperCase())
         .get();
 
     notifyListeners();
@@ -62,7 +62,7 @@ class CargoProvider with ChangeNotifier {
     sms == '';
     final results = await FirebaseFirestore.instance
         .collection('cargos')
-        .doc(trackingNo.replaceAll('/', '_'))
+        .doc(trackingNo.replaceAll('/', '_').toUpperCase())
         .get();
     sms = getOtp().toString();
     final cargo = CargoModel.fromJson(results);
@@ -134,7 +134,7 @@ class CargoProvider with ChangeNotifier {
 }
 
 int getOtp() {
-  var rnd = new math.Random();
+  var rnd = math.Random();
   var next = rnd.nextDouble() * 1000000;
   while (next < 100000) {
     next *= 10;

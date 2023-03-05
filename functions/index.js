@@ -1,6 +1,7 @@
 const admin = require("firebase-admin");
 const functions = require("firebase-functions");
 const twilio = require("twilio");
+const cors = require("cors")({ origin: true });
 
 // User IDs to be deleted
 const UIDs = [];
@@ -71,3 +72,28 @@ exports.sendNotificationOnDelay = functions.pubsub
       }
     }
   });
+
+exports.sendTwilioMessage = functions.https.onRequest(async (req, res) => {
+  res.set("Access-Control-Allow-Origin", "*");
+
+  cors(req, res, async () => {
+    const { message, phone } = req.body;
+    const smsData = await admin
+      .firestore()
+      .collection("sms")
+      .doc("config")
+      .get();
+    const accountSid = smsData.data().accountSid;
+    const authToken = smsData.data().authToken;
+    const twilioNumber = smsData.data().twilioNumber;
+    const client = new twilio(accountSid, authToken);
+
+    client.messages
+      .create({
+        body: message,
+        to: phone,
+        from: twilioNumber,
+      })
+      .then((message) => res.send(message.sid));
+  });
+});

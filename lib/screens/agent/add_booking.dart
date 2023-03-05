@@ -1,6 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
 
 import 'package:cargo/helpers/my_loader.dart';
+import 'package:cargo/helpers/parse_phone.dart';
 import 'package:cargo/models/cargo_model.dart';
 import 'package:cargo/providers/auth_provider.dart';
 import 'package:cargo/providers/cargo_provider.dart';
@@ -499,7 +500,7 @@ class _AddBookingScreenState extends State<AddBookingScreen> {
                           weight: null,
                           userId: uid,
                           destination: destinaton,
-                          phoneNumber: phoneNumber,
+                          phoneNumber: parsePhone(phoneNumber!),
                           invoiceNumber: invoiceNumber,
                           origin: origin,
                           paymentMode: null,

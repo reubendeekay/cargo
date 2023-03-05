@@ -1,5 +1,6 @@
 import 'package:cargo/constants.dart';
 import 'package:cargo/helpers/my_loader.dart';
+import 'package:cargo/helpers/parse_phone.dart';
 import 'package:cargo/models/cargo_model.dart';
 import 'package:cargo/providers/cargo_provider.dart';
 import 'package:cargo/screens/tracking/shipment_details.dart';
@@ -67,7 +68,7 @@ class _AllShipmentsState extends State<AllShipments> {
                     child: TextFormField(
                       onChanged: (val) {
                         setState(() {
-                          phoneNumber = val;
+                          phoneNumber = parsePhone(val);
                         });
                       },
                       validator: (val) {
@@ -133,7 +134,7 @@ class _AllShipmentsState extends State<AllShipments> {
                         return;
                       }
                       await Provider.of<CargoProvider>(context, listen: false)
-                          .sendOtp(phoneNumber!);
+                          .sendOtp(parsePhone(phoneNumber!));
                       setState(() {
                         isLoading = false;
                       });
@@ -175,7 +176,8 @@ class _AllShipmentsState extends State<AllShipments> {
                 child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
                         .collection('cargos')
-                        .where('phoneNumber', isEqualTo: phoneNumber)
+                        .where('phoneNumber',
+                            isEqualTo: parsePhone(phoneNumber!))
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {

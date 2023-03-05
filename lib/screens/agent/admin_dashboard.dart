@@ -131,10 +131,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
             },
             validator: (val) {
               if (val!.isEmpty) {
-                return "Please enter a phone number";
+                return "Please enter a valid tracking number";
               }
               if (val.length < 12) {
-                return "Please enter a valid phone number";
+                return "Please enter a valid tracking number";
               }
               return null;
             },
@@ -200,7 +200,9 @@ class _AdminDashboardState extends State<AdminDashboard> {
               ),
               const Spacer(),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Get.to(() => const CargoDirectory());
+                },
                 child: const Text(
                   'See all  >',
                   style: TextStyle(color: kPrimaryColor, fontSize: 12),
@@ -291,15 +293,15 @@ class NextArrivalWidget extends StatelessWidget {
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
+                children: const [
+                  Text(
                     'Arrives in',
                     style: TextStyle(fontSize: 12, color: Colors.grey),
                   ),
-                  const SizedBox(
+                  SizedBox(
                     height: 5,
                   ),
-                  const Text(
+                  Text(
                     'Nairobi,KE',
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
@@ -318,16 +320,16 @@ class NextArrivalWidget extends StatelessWidget {
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
+                children: const [
+                  Text(
                     'Expected on',
                     style: TextStyle(fontSize: 12, color: Colors.grey),
                   ),
-                  const SizedBox(
+                  SizedBox(
                     height: 5,
                   ),
-                  const Text(
-                    '12/12/2021  | 7am to 10pm',
+                  Text(
+                    '12/02/2023  | 7am to 10pm',
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                     ),

@@ -440,10 +440,17 @@ class _UpdateShipmentScreenState extends State<UpdateShipmentScreen> {
                             });
                             Navigator.of(context).pop();
                           },
-                          child: FxText.bodyMedium(
-                            'Update',
-                            color: Colors.white,
-                          ),
+                          child: isLoading
+                              ? const SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(
+                                      color: Colors.white),
+                                )
+                              : FxText.bodyMedium(
+                                  'Update',
+                                  color: Colors.white,
+                                ),
                         ),
                       )
                     ],
